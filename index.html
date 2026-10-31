@@ -29,11 +29,9 @@ input[type=checkbox]{width:22px;height:22px;accent-color:#bd2929}
 .checklist label{display:flex;align-items:center;gap:5px}
 .item{border-bottom:1px solid #ddd;padding:12px 0}
 small{color:#666}
-.notice{padding:12px;border-radius:10px;background:#fff3d5;margin:10px 0}
 [hidden]{display:none!important}
 @media(min-width:600px){.tiles{grid-template-columns:repeat(3,1fr)}}
 
-/* Farben für die Küche */
 .orderCard{
 border:3px solid transparent;
 border-radius:14px;
@@ -56,6 +54,7 @@ border-color:#22a447;
 text-decoration:line-through;
 opacity:.65;
 }
+.hotIcon{font-size:52px;padding:12px}
 </style>
 </head>
 <body>
@@ -65,8 +64,10 @@ opacity:.65;
 <button onclick="showPage('order')">Bestellen</button>
 <button onclick="showPage('kitchen')">👨‍🍳 Küche</button>
 </header>
+
 <main>
 <div id="order">
+
 <section>
 <h2>Dein Name</h2>
 <input id="customerName" maxlength="80" placeholder="Name eingeben">
@@ -125,6 +126,17 @@ opacity:.65;
 </section>
 
 <section>
+<h2>☕ Heisse Getränke</h2>
+<p>Wähle dein heisses Getränk:</p>
+<div id="hotDrinks" class="tiles"></div>
+<p><small>Beim Tee kannst du die Sorte aus unserer Teebox auswählen.</small></p>
+<div class="row">
+<label>Anzahl <input id="hotQty" type="number" min="1" max="20" value="1"></label>
+<button onclick="addHotDrink()">Heisses Getränk hinzufügen</button>
+</div>
+</section>
+
+<section>
 <h2>🍨 Dessert</h2>
 <p>Du kannst verschiedene Eiskugeln kombinieren.</p>
 <div id="ice" class="tiles"></div>
@@ -141,6 +153,7 @@ opacity:.65;
 <button id="sendButton" onclick="submitOrder()">Bestellung abschicken</button>
 <p id="orderMessage" role="status"></p>
 </section>
+
 </div>
 
 <div id="kitchen" hidden>
@@ -196,6 +209,7 @@ return String(s).replace(/[&<>"']/g,c=>({
 '"':"&quot;","'":"&#39;"
 }[c]));
 }
+
 function picture(n){
 const p=positions[n];
 if(!p)return "";
@@ -207,10 +221,15 @@ return '<div class="picture" role="img" aria-label="'+esc(n)+'" style="--sheet:u
 
 const burgerNames=["Chickenburger","Beafburger"];
 const drinkNames=["Coca-Cola","Fanta","Eistee","Wasser mit Kohlensäure","Wasser ohne Kohlensäure"];
+const hotNames=["Cappuccino","Espresso","Tee"];
+const hotIcons=["☕","☕","🍵"];
 const iceNames=["Vanille","Schoko","Kaffee"];
 const toppingNames=["Streusel","Ovo","Rahm"];
+
 let burger=burgerNames[0];
 let drink=drinkNames[0];
+let hotDrink=hotNames[0];
+
 const iceCounts={Vanille:0,Schoko:0,Kaffee:0};
 const toppings=new Set();
 const cart=[];
@@ -220,101 +239,147 @@ $(id).innerHTML=names.map((n,i)=>
 '<button class="tile '+(n===selected?'selected':'')+'" onclick="'+fn+'('+i+')">'+picture(n)+'<strong>'+esc(n)+'</strong></button>'
 ).join("");
 }
+
 function chooseBurger(i){
 burger=burgerNames[i];
 renderChoices("burgers",burgerNames,burger,"chooseBurger");
 }
+
 function chooseDrink(i){
 drink=drinkNames[i];
 renderChoices("drinks",drinkNames,drink,"chooseDrink");
 }
+
+function chooseHotDrink(i){
+hotDrink=hotNames[i];
+$("hotDrinks").innerHTML=hotNames.map((n,j)=>
+'<button class="tile '+(n===hotDrink?'selected':'')+'" onclick="chooseHotDrink('+j+')">'+
+'<div class="hotIcon">'+hotIcons[j]+'</div>'+
+'<strong>'+esc(n)+'</strong></button>'
+).join("");
+}
+
 function renderIce(){
 $("ice").innerHTML=iceNames.map((n,i)=>
 '<div class="tile">'+picture(n)+'<strong>'+n+'</strong><div class="count"><button onclick="changeIce('+i+',-1)">−</button><b>'+iceCounts[n]+'</b><button onclick="changeIce('+i+',1)">+</button></div></div>'
 ).join("");
 }
+
 function changeIce(i,d){
 const n=iceNames[i];
 iceCounts[n]=Math.max(0,Math.min(20,iceCounts[n]+d));
 renderIce();
 }
+
 function renderToppings(){
 $("toppings").innerHTML=toppingNames.map((n,i)=>
 '<label class="tile '+(toppings.has(n)?'selected':'')+'">'+picture(n)+'<strong>'+n+'</strong><input type="checkbox" '+(toppings.has(n)?'checked':'')+' onchange="toggleTopping('+i+',this.checked)"></label>'
 ).join("");
 }
+
 function toggleTopping(i,on){
 const n=toppingNames[i];
 if(on)toppings.add(n);else toppings.delete(n);
 renderToppings();
 }
+
 function selected(id){
 return [...$(id).querySelectorAll("input:checked")].map(x=>x.value);
 }
+
 function qty(id){
 return Math.max(1,Math.min(20,Math.floor(Number($(id).value)||1)));
 }
+
 function add(item){
 cart.push(item);
 renderCart();
 $("orderMessage").textContent="Zum Warenkorb hinzugefügt.";
 }
+
 function addBurger(){
-add({name:burger,qty:qty("burgerQty"),
-details:"Zutaten: "+(selected("ingredients").join(", ")||"keine")+" | Saucen: "+(selected("sauces").join(", ")||"keine")});
+add({
+name:burger,
+qty:qty("burgerQty"),
+details:"Zutaten: "+(selected("ingredients").join(", ")||"keine")+
+" | Saucen: "+(selected("sauces").join(", ")||"keine")
+});
 }
+
 function addSimple(name,id){
 add({name,qty:qty(id),details:""});
 }
+
 function addDrink(){
 add({name:drink,qty:qty("drinkQty"),details:""});
 }
+
+function addHotDrink(){
+add({
+name:hotDrink,
+qty:qty("hotQty"),
+details:hotDrink==="Tee"?"Sorte aus der Teebox auswählen":""
+});
+}
+
 function addIce(){
 const balls=iceNames.filter(n=>iceCounts[n]>0).map(n=>iceCounts[n]+"× "+n);
-if(!balls.length){alert("Bitte Eiskugeln auswählen.");return}
-add({name:"Glace",qty:1,details:balls.join(" + ")+" | Toppings: "+([...toppings].join(", ")||"keine")});
+if(!balls.length){
+alert("Bitte Eiskugeln auswählen.");
+return;
+}
+add({
+name:"Glace",
+qty:1,
+details:balls.join(" + ")+" | Toppings: "+([...toppings].join(", ")||"keine")
+});
 iceNames.forEach(n=>iceCounts[n]=0);
 toppings.clear();
 renderIce();
 renderToppings();
 }
+
 function renderCart(){
 $("cart").innerHTML=cart.length?cart.map((x,i)=>
 '<div class="item"><b>'+x.qty+'× '+esc(x.name)+'</b><p><small>'+esc(x.details)+'</small></p><button onclick="removeItem('+i+')">Entfernen</button></div>'
 ).join(""):"Noch leer";
 }
+
 function removeItem(i){
 cart.splice(i,1);
 renderCart();
 }
+
 function showPage(page){
 $("order").hidden=page!=="order";
 $("kitchen").hidden=page!=="kitchen";
 window.scrollTo(0,0);
 }
+
 function submitOrder(){
 if(window.sendLiveOrder)window.sendLiveOrder();
 else alert("Firebase wird geladen. Bitte kurz warten.");
 }
+
 function kitchenLogin(){
 if(window.liveLogin)window.liveLogin();
 else alert("Firebase wird geladen.");
 }
+
 function kitchenLogout(){
 if(window.liveLogout)window.liveLogout();
 }
+
 function changeStatus(id,status){
 if(window.liveStatus)window.liveStatus(id,status);
 }
 
-/* Neue farbige Küchenanzeige */
 function renderOrders(orders){
 $("orders").innerHTML=orders.length
 ?orders.map(o=>{
 const statusClass=
 o.status==="Fertig"?"fertig":
-o.status==="In Zubereitung"?"zubereitung":
-"neu";
+o.status==="In Zubereitung"?"zubereitung":"neu";
 
 return '<div class="orderCard '+statusClass+'">'+
 '<div class="orderContent">'+
@@ -326,17 +391,12 @@ esc(o.name)+' – '+esc(o.status)+
 '<small>'+esc(o.time)+'</small>'+
 o.items.map(x=>
 '<p>'+esc(x.qty)+'× '+esc(x.name)+
-'<br><small>'+esc(x.details||"")+
-'</small></p>'
+'<br><small>'+esc(x.details||"")+'</small></p>'
 ).join("")+
 '</div>'+
 '<div class="row">'+
-'<button data-id="'+esc(o.id)+
-'" data-status="In Zubereitung" class="statusButton">'+
-'In Zubereitung</button>'+
-'<button data-id="'+esc(o.id)+
-'" data-status="Fertig" class="statusButton">'+
-'Fertig</button>'+
+'<button data-id="'+esc(o.id)+'" data-status="In Zubereitung" class="statusButton">In Zubereitung</button>'+
+'<button data-id="'+esc(o.id)+'" data-status="Fertig" class="statusButton">Fertig</button>'+
 '</div></div>';
 }).join("")
 :"Noch keine Bestellungen";
@@ -346,10 +406,12 @@ $("orders").addEventListener("click",e=>{
 const b=e.target.closest(".statusButton");
 if(b)changeStatus(b.dataset.id,b.dataset.status);
 });
+
 $("nuggetPicture").innerHTML=picture("Chicken Nuggets");
 $("friesPicture").innerHTML=picture("Pommes");
 chooseBurger(0);
 chooseDrink(0);
+chooseHotDrink(0);
 renderIce();
 renderToppings();
 renderCart();
@@ -379,15 +441,23 @@ let stopListening=null;
 
 window.sendLiveOrder=async()=>{
 const name=$("customerName").value.trim();
-if(!name){alert("Bitte Namen eingeben.");return}
-if(!cart.length){alert("Bitte Produkte hinzufügen.");return}
+if(!name){
+alert("Bitte Namen eingeben.");
+return;
+}
+if(!cart.length){
+alert("Bitte Produkte hinzufügen.");
+return;
+}
 const button=$("sendButton");
 button.disabled=true;
 $("orderMessage").textContent="Bestellung wird gesendet …";
 try{
 let user=auth.currentUser;
 if(!user)user=(await signInAnonymously(auth)).user;
-if(user.uid===kitchenUid)throw Error("Bitte zum Bestellen ein anderes Gerät verwenden.");
+if(user.uid===kitchenUid){
+throw Error("Bitte zuerst in der Küche abmelden oder ein anderes Gerät verwenden.");
+}
 await addDoc(collection(db,"bestellungen"),{
 name,
 artikel:cart.map(x=>({...x})),
@@ -400,7 +470,9 @@ renderCart();
 $("orderMessage").textContent="✅ Bestellung erfolgreich gesendet!";
 }catch(e){
 $("orderMessage").textContent="❌ Nicht gesendet: "+e.message;
-}finally{button.disabled=false}
+}finally{
+button.disabled=false;
+}
 };
 
 window.liveLogin=async()=>{
@@ -419,7 +491,10 @@ $("loginMessage").textContent="Anmeldung fehlgeschlagen: "+e.message;
 };
 
 window.liveLogout=async()=>{
-if(stopListening){stopListening();stopListening=null}
+if(stopListening){
+stopListening();
+stopListening=null;
+}
 await signOut(auth);
 };
 
@@ -444,7 +519,8 @@ $("kitchenMessage").textContent=orders.length+" Bestellungen";
 },
 error=>{
 $("kitchenMessage").textContent="Fehler beim Laden: "+error.message;
-});
+}
+);
 }
 
 window.liveStatus=async(id,status)=>{
@@ -459,9 +535,13 @@ onAuthStateChanged(auth,user=>{
 const kitchen=!!user&&user.uid===kitchenUid;
 $("loginArea").hidden=kitchen;
 $("kitchenArea").hidden=!kitchen;
-if(kitchen)listen();
-else{
-if(stopListening){stopListening();stopListening=null}
+if(kitchen){
+listen();
+}else{
+if(stopListening){
+stopListening();
+stopListening=null;
+}
 renderOrders([]);
 }
 });
