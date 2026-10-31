@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privatburger</title>
+<style>
+body{font-family:Arial,sans-serif;background:#fff6e8;margin:0;color:#29231c}
+header{background:#c62828;color:white;text-align:center;padding:20px}
+main{max-width:650px;margin:auto;padding:14px}
+section{background:white;border-radius:15px;padding:16px;margin:12px 0;box-shadow:0 2px 8px #0001}
+button,input,select{font:inherit;padding:10px;border-radius:8px;border:1px solid #ccc}
+button{background:#ffcc32;border:0;font-weight:bold;margin:4px;cursor:pointer}
+input[type=number]{width:55px}
+.line{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 0}
+label{display:inline-block;margin:6px}
+#cart article,#orders article{border-bottom:1px solid #ddd;padding:10px 0}
+small{color:#666}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+<h1>🍔 Privatburger</h1>
+<p>Gratis bestellen</p>
+<button onclick="show('order')">Bestellen</button>
+<button onclick="show('kitchen')">👨‍🍳 Küche</button>
+</header>
+<main>
+<div id="order">
+<section>
+<h3>Dein Name</h3>
+<input id="name" placeholder="Name eingeben">
+</section>
+<section>
+<h2>🍔 Burger</h2>
+<select id="burger">
+<option>Chickenburger</option>
+<option>Beafburger</option>
+</select>
+<h3>Zutaten</h3>
+<div id="ingredients"></div>
+<h3>Saucen</h3>
+<div id="sauces"></div>
+<div class="line">
+<label>Anzahl <input id="burgerQty" type="number" min="1" value="1"></label>
+<button onclick="addBurger()">Hinzufügen</button>
+</div>
+</section>
+<section>
+<h2>🍗 Chicken Nuggets</h2>
+<label>Anzahl <input id="nuggets" type="number" min="1" value="1"></label>
+<button onclick="addSimple('Chicken Nuggets','nuggets')">Hinzufügen</button>
+</section>
+<section>
+<h2>🍟 Pommes</h2>
+<label>Anzahl <input id="fries" type="number" min="1" value="1"></label>
+<button onclick="addSimple('Pommes','fries')">Hinzufügen</button>
+</section>
+<section>
+<h2>🥤 Getränke</h2>
+<select id="drink">
+<option>CocaCola</option>
+<option>Eistee</option>
+<option>Fanta</option>
+<option>Wasser mit Kohlensäure</option>
+<option>Wasser ohne Kohlensäure</option>
+</select>
+<label>Anzahl <input id="drinkQty" type="number" min="1" value="1"></label>
+<button onclick="addDrink()">Hinzufügen</button>
+</section>
+<section>
+<h2>🍨 Dessert</h2>
+<p>Wähle die Kugeln einzeln. Mischen ist möglich!</p>
+<div id="flavors"></div>
+<h3>Toppings</h3>
+<div id="toppings"></div>
+<button onclick="addIce()">Eis hinzufügen</button>
+</section>
+<section>
+<h2>🛒 Warenkorb</h2>
+<div id="cart">Noch leer</div>
+<button onclick="submitOrder()">Bestellung abschicken</button>
+<p id="message"></p>
+</section>
+</div>
+<div id="kitchen" hidden>
+<section>
+<h2>👨‍🍳 Bestellungen</h2>
+<p><small>Derzeit nur auf diesem Gerät gespeichert. Für mehrere Geräte wird später eine Online-Datenbank benötigt.</small></p>
+<div id="orders"></div>
+</section>
+</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const cart=[];
+const storageKey='privatburger_orders';
+function checks(id,items,checked=false){
+$(id).innerHTML=items.map(x=>'<label><input type="checkbox" value="'+x+'" '+(checked?'checked':'')+'>'+x+'</label>').join('');
+}
+checks('ingredients',['Gurken','Zwiebel','Salat','Tomaten','Käse'],true);
+checks('sauces',['BigMac Sauce','Cocktail','Ketchup','Mayonnaise']);
+checks('toppings',['Streusel','Ovo','Rahm']);
+$('flavors').innerHTML=['Vanille','Schoko','Kaffee'].map(x=>'<div class="line"><label>'+x+'</label><input type="number" min="0" max="20" value="0" data-flavor="'+x+'"></div>').join('');
+function selected(id){return [...$(id).querySelectorAll('input:checked')].map(x=>x.value)}
+function qty(id){return Math.max(1,Math.min(20,Number($(id).value)||1))}
+function add(x){cart.push(x);renderCart()}
+function addBurger(){
+add({name:$('burger').value,qty:qty('burgerQty'),details:'Zutaten: '+(selected('ingredients').join(', ')||'keine')+' | Saucen: '+(selected('sauces').join(', ')||'keine')});
+}
+function addSimple(name,id){add({name,qty:qty(id),details:''})}
+function addDrink(){add({name:$('drink').value,qty:qty('drinkQty'),details:''})}
+function addIce(){
+const scoops=[...document.querySelectorAll('[data-flavor]')].filter(x=>Number(x.value)>0).map(x=>Math.min(20,Number(x.value))+'x '+x.dataset.flavor);
+if(!scoops.length){alert('Bitte Eiskugeln auswählen');return}
+add({name:'Eis',qty:1,details:scoops.join(' + ')+' | Toppings: '+(selected('toppings').join(', ')||'keine')});
+}
+function safe(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderCart(){
+$('cart').innerHTML=cart.length?cart.map((x,i)=>'<article><b>'+x.qty+'x '+safe(x.name)+'</b><p><small>'+safe(x.details)+'</small></p><button onclick="removeItem('+i+')">Entfernen</button></article>').join(''):'Noch leer';
+}
+function removeItem(i){cart.splice(i,1);renderCart()}
+function load(){try{return JSON.parse(localStorage.getItem(storageKey)||'[]')}catch(e){return []}}
+function save(data){localStorage.setItem(storageKey,JSON.stringify(data))}
+function submitOrder(){
+const name=$('name').value.trim();
+if(!name){alert('Bitte Namen eingeben');return}
+if(!cart.length){alert('Bitte etwas auswählen');return}
+const data=load();
+data.unshift({id:Date.now(),name,items:cart.map(x=>({...x})),status:'Neu',time:new Date().toLocaleString('de-CH')});
+save(data);cart.length=0;renderCart();
+$('message').textContent='Bestellung gespeichert!';
+renderOrders();
+}
+function renderOrders(){
+$('orders').innerHTML=load().map(o=>'<article><h3>'+safe(o.name)+' – '+safe(o.status)+'</h3><small>'+safe(o.time)+'</small>'+o.items.map(x=>'<p>'+x.qty+'x '+safe(x.name)+'<br><small>'+safe(x.details)+'</small></p>').join('')+'<button onclick="changeStatus('+o.id+',\'In Zubereitung\')">In Zubereitung</button><button onclick="changeStatus('+o.id+',\'Fertig\')">Fertig</button></article>').join('')||'Noch keine Bestellungen';
+}
+function changeStatus(id,status){save(load().map(o=>o.id===id?{...o,status}:o));renderOrders()}
+function show(tab){$('order').hidden=tab!=='order';$('kitchen').hidden=tab!=='kitchen';if(tab==='kitchen')renderOrders()}
+renderCart();renderOrders();
+</script>
+</body>
+</html>
