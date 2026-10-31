@@ -32,6 +32,30 @@ small{color:#666}
 .notice{padding:12px;border-radius:10px;background:#fff3d5;margin:10px 0}
 [hidden]{display:none!important}
 @media(min-width:600px){.tiles{grid-template-columns:repeat(3,1fr)}}
+
+/* Farben für die Küche */
+.orderCard{
+border:3px solid transparent;
+border-radius:14px;
+padding:14px;
+margin:12px 0;
+}
+.orderCard.neu{
+background:#ffe2e2;
+border-color:#e53935;
+}
+.orderCard.zubereitung{
+background:#fff0cc;
+border-color:#f5a623;
+}
+.orderCard.fertig{
+background:#dcfce7;
+border-color:#22a447;
+}
+.orderCard.fertig .orderContent{
+text-decoration:line-through;
+opacity:.65;
+}
 </style>
 </head>
 <body>
@@ -282,13 +306,42 @@ if(window.liveLogout)window.liveLogout();
 function changeStatus(id,status){
 if(window.liveStatus)window.liveStatus(id,status);
 }
+
+/* Neue farbige Küchenanzeige */
 function renderOrders(orders){
-$("orders").innerHTML=orders.length?orders.map(o=>
-'<div class="item"><h3>'+esc(o.name)+' – '+esc(o.status)+'</h3><small>'+esc(o.time)+'</small>'+
-o.items.map(x=>'<p>'+esc(x.qty)+'× '+esc(x.name)+'<br><small>'+esc(x.details||"")+'</small></p>').join("")+
-'<div class="row"><button data-id="'+esc(o.id)+'" data-status="In Zubereitung" class="statusButton">In Zubereitung</button><button data-id="'+esc(o.id)+'" data-status="Fertig" class="statusButton">Fertig</button></div></div>'
-).join(""):"Noch keine Bestellungen";
+$("orders").innerHTML=orders.length
+?orders.map(o=>{
+const statusClass=
+o.status==="Fertig"?"fertig":
+o.status==="In Zubereitung"?"zubereitung":
+"neu";
+
+return '<div class="orderCard '+statusClass+'">'+
+'<div class="orderContent">'+
+'<h3>'+
+(statusClass==="neu"?"🔴 ":
+statusClass==="fertig"?"🟢 ":"🟠 ")+
+esc(o.name)+' – '+esc(o.status)+
+'</h3>'+
+'<small>'+esc(o.time)+'</small>'+
+o.items.map(x=>
+'<p>'+esc(x.qty)+'× '+esc(x.name)+
+'<br><small>'+esc(x.details||"")+
+'</small></p>'
+).join("")+
+'</div>'+
+'<div class="row">'+
+'<button data-id="'+esc(o.id)+
+'" data-status="In Zubereitung" class="statusButton">'+
+'In Zubereitung</button>'+
+'<button data-id="'+esc(o.id)+
+'" data-status="Fertig" class="statusButton">'+
+'Fertig</button>'+
+'</div></div>';
+}).join("")
+:"Noch keine Bestellungen";
 }
+
 $("orders").addEventListener("click",e=>{
 const b=e.target.closest(".statusButton");
 if(b)changeStatus(b.dataset.id,b.dataset.status);
