@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 <html lang="de">
 <head>
@@ -134,7 +136,7 @@ $('message').textContent='Bestellung gespeichert!';
 renderOrders();
 }
 function renderOrders(){
-$('orders').innerHTML=load().map(o=>'<article><h3>'+safe(o.name)+' – '+safe(o.status)+'</h3><small>'+safe(o.time)+'</small>'+o.items.map(x=>'<p>'+x.qty+'x '+safe(x.name)+'<br><small>'+safe(x.details)+'</small></p>').join('')+'<button onclick="changeStatus('+o.id+',\'In Zubereitung\')">In Zubereitung</button><button onclick="changeStatus('+o.id+',\'Fertig\')">Fertig</button></article>').join('')||'Noch keine Bestellungen';
+$('orders').innerHTML=load().map(o=>'<article><h3>'+safe(o.name)+' – '+safe(o.status)+'</h3><small>'+safe(o.time)+'</small>'+o.items.map(x=>'<p>'+x.qty+'x '+safe(x.name)+'<br><small>'+safe(x.details)+'</small></p>').join('')+'<button onclick="changeStatus('+o.id+',\\'In Zubereitung\\')">In Zubereitung</button><button onclick="changeStatus('+o.id+',\\'Fertig\\')">Fertig</button></article>').join('')||'Noch keine Bestellungen';
 }
 function changeStatus(id,status){save(load().map(o=>o.id===id?{...o,status}:o));renderOrders()}
 function show(tab){$('order').hidden=tab!=='order';$('kitchen').hidden=tab!=='kitchen';if(tab==='kitchen')renderOrders()}
@@ -142,3 +144,4 @@ renderCart();renderOrders();
 </script>
 </body>
 </html>
+  
