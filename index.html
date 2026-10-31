@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Privatburger</title>
+<title>MC Blumenweg</title>
 <style>
 body{font-family:Arial,sans-serif;background:#fff6e8;margin:0;color:#29231c}
 header{background:#c62828;color:white;text-align:center;padding:20px}
@@ -23,7 +23,7 @@ small{color:#666}
 </head>
 <body>
 <header>
-<h1>🍔 Privatburger</h1>
+<h1>🍔 MC Blumenweg<h1>
 <p>Gratis bestellen</p>
 <button onclick="show('order')">Bestellen</button>
 <button onclick="show('kitchen')">👨‍🍳 Küche</button>
@@ -41,7 +41,13 @@ small{color:#666}
 <option>Beafburger</option>
 </select>
 <h3>Zutaten</h3>
-<div id="ingredients"></div>
+<div id="ingredients">
+<label><input type="checkbox" value="Gurken" checked> Gurken</label>
+<label><input type="checkbox" value="Zwiebel" checked> Zwiebeln</label>
+<label><input type="checkbox" value="Salat" checked> Salat</label>
+<label><input type="checkbox" value="Tomaten" checked> Tomaten</label>
+<label><input type="checkbox" value="Käse" checked> Käse</label>
+</div>
 <h3>Saucen</h3>
 <div id="sauces"></div>
 <div class="line">
@@ -101,7 +107,7 @@ const storageKey='privatburger_orders';
 function checks(id,items,checked=false){
 $(id).innerHTML=items.map(x=>'<label><input type="checkbox" value="'+x+'" '+(checked?'checked':'')+'>'+x+'</label>').join('');
 }
-checks('ingredients',['Gurken','Zwiebel','Salat','Tomaten','Käse'],true);
+;
 checks('sauces',['BigMac Sauce','Cocktail','Ketchup','Mayonnaise']);
 checks('toppings',['Streusel','Ovo','Rahm']);
 $('flavors').innerHTML=['Vanille','Schoko','Kaffee'].map(x=>'<div class="line"><label>'+x+'</label><input type="number" min="0" max="20" value="0" data-flavor="'+x+'"></div>').join('');
