@@ -7,141 +7,50 @@
 <title>MC Blumenweg</title>
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#fff5e6;
- color:#30291f;
-}
-header{
- background:#bb2929;
- color:white;
- text-align:center;
- padding:20px 12px;
-}
-header h1{margin:5px 0;font-size:30px}
-header p{margin:8px}
-main{max-width:780px;margin:auto;padding:12px}
-section{
- background:white;
- border-radius:18px;
- padding:18px;
- margin:14px 0;
- box-shadow:0 2px 12px #0001;
-}
-button{
- border:0;
- border-radius:11px;
- background:#ffd13d;
- color:#211b15;
- padding:12px;
- font-size:16px;
- font-weight:bold;
- cursor:pointer;
-}
-button:active{opacity:.7}
-input,select{
- font:inherit;
- padding:10px;
- border:1px solid #ccc;
- border-radius:10px;
- max-width:100%;
-}
-input[type=number]{width:70px}
-input[type=checkbox]{
- width:22px;
- height:22px;
- accent-color:#bd2929;
-}
-.row{
- display:flex;
- align-items:center;
- gap:10px;
- flex-wrap:wrap;
- margin:12px 0;
-}
-.checklist{
- display:flex;
- flex-wrap:wrap;
- gap:8px 15px;
-}
-.checklist label{
- display:flex;
- align-items:center;
- gap:6px;
- padding:5px 0;
-}
-.tiles{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:12px;
-}
-.tile{
- border:2px solid #eee;
- border-radius:14px;
- padding:8px;
- text-align:center;
- background:white;
- min-width:0;
-}
-button.tile{font-size:15px}
-.tile.selected{
- border-color:#bd2929;
- background:#fff0d8;
-}
-.tile strong{
- display:block;
- margin:8px 0;
- font-size:15px;
-}
-.picture{
- width:100%;
- aspect-ratio:1.05;
- border-radius:10px;
- background-color:#fff9f1;
- background-image:var(--sheet);
- background-repeat:no-repeat;
- background-size:var(--sw) var(--sh);
- background-position:var(--px) var(--py);
-}
-.count{
- display:flex;
- align-items:center;
- justify-content:center;
- gap:10px;
-}
-.count button{min-width:40px}
-.item{
- border-bottom:1px solid #ddd;
- padding:12px 0;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#fff5e6;color:#30291f}
+header{background:#bd2929;color:white;text-align:center;padding:20px 10px}
+header h1{margin:5px}
+main{max-width:800px;margin:auto;padding:12px}
+section{background:white;border-radius:18px;padding:17px;margin:14px 0;box-shadow:0 2px 10px #0001}
+button{background:#ffd13d;border:0;border-radius:10px;padding:12px;font-size:16px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5}
+input,select{font:inherit;padding:10px;border:1px solid #ccc;border-radius:9px;max-width:100%}
+input[type=number]{width:65px}
+input[type=checkbox]{width:22px;height:22px;accent-color:#bd2929}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tile{border:2px solid #eee;border-radius:14px;background:white;padding:8px;text-align:center;min-width:0}
+.tile.selected{border-color:#bd2929;background:#fff0d8}
+.tile strong{display:block;margin:8px 0;font-size:14px}
+.picture{width:100%;aspect-ratio:1.05;border-radius:9px;background-color:#fff9f1;background-image:var(--sheet);background-size:var(--sw) var(--sh);background-position:var(--px) var(--py);background-repeat:no-repeat}
+.count{display:flex;align-items:center;justify-content:center;gap:10px}
+.count button{min-width:38px}
+.checklist{display:flex;gap:12px;flex-wrap:wrap}
+.checklist label{display:flex;align-items:center;gap:5px}
+.item{border-bottom:1px solid #ddd;padding:12px 0}
 small{color:#666}
+.notice{padding:12px;border-radius:10px;background:#fff3d5;margin:10px 0}
 [hidden]{display:none!important}
-@media(min-width:600px){
- .tiles{grid-template-columns:repeat(3,1fr)}
-}
+@media(min-width:600px){.tiles{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
 <header>
 <h1>🍔 MC Blumenweg</h1>
 <p>Gratis bestellen</p>
-<button onclick="show('order')">Bestellen</button>
-<button onclick="show('kitchen')">👨‍🍳 Küche</button>
+<button onclick="showPage('order')">Bestellen</button>
+<button onclick="showPage('kitchen')">👨‍🍳 Küche</button>
 </header>
-
 <main>
 <div id="order">
-
 <section>
 <h2>Dein Name</h2>
-<input id="name" placeholder="Name eingeben">
+<input id="customerName" maxlength="80" placeholder="Name eingeben">
 </section>
 
 <section>
 <h2>🍔 Burger</h2>
 <div id="burgers" class="tiles"></div>
-
 <h3>Zutaten</h3>
 <div id="ingredients" class="checklist">
 <label><input type="checkbox" value="Gurken" checked>Gurken</label>
@@ -150,7 +59,6 @@ small{color:#666}
 <label><input type="checkbox" value="Tomaten" checked>Tomaten</label>
 <label><input type="checkbox" value="Käse" checked>Käse</label>
 </div>
-
 <h3>Saucen</h3>
 <div id="sauces" class="checklist">
 <label><input type="checkbox" value="BigMac Sauce">BigMac Sauce</label>
@@ -158,7 +66,6 @@ small{color:#666}
 <label><input type="checkbox" value="Ketchup">Ketchup</label>
 <label><input type="checkbox" value="Mayonnaise">Mayonnaise</label>
 </div>
-
 <div class="row">
 <label>Anzahl <input id="burgerQty" type="number" min="1" max="20" value="1"></label>
 <button onclick="addBurger()">Burger hinzufügen</button>
@@ -167,7 +74,7 @@ small{color:#666}
 
 <section>
 <h2>🍗 Chicken Nuggets</h2>
-<div id="nuggetPicture"></div>
+<div id="nuggetPicture" style="max-width:170px"></div>
 <div class="row">
 <label>Anzahl <input id="nuggetsQty" type="number" min="1" max="20" value="1"></label>
 <button onclick="addSimple('Chicken Nuggets','nuggetsQty')">Hinzufügen</button>
@@ -176,7 +83,7 @@ small{color:#666}
 
 <section>
 <h2>🍟 Pommes</h2>
-<div id="friesPicture"></div>
+<div id="friesPicture" style="max-width:170px"></div>
 <div class="row">
 <label>Anzahl <input id="friesQty" type="number" min="1" max="20" value="1"></label>
 <button onclick="addSimple('Pommes','friesQty')">Hinzufügen</button>
@@ -185,7 +92,7 @@ small{color:#666}
 
 <section>
 <h2>🥤 Getränke</h2>
-<p>Tippe auf dein Getränk:</p>
+<p>Getränk auswählen:</p>
 <div id="drinks" class="tiles"></div>
 <div class="row">
 <label>Anzahl <input id="drinkQty" type="number" min="1" max="20" value="1"></label>
@@ -195,9 +102,8 @@ small{color:#666}
 
 <section>
 <h2>🍨 Dessert</h2>
-<p>Wähle deine Eiskugeln. Mischen ist möglich!</p>
+<p>Du kannst verschiedene Eiskugeln kombinieren.</p>
 <div id="ice" class="tiles"></div>
-
 <h3>Toppings</h3>
 <div id="toppings" class="tiles"></div>
 <div class="row">
@@ -208,305 +114,304 @@ small{color:#666}
 <section>
 <h2>🛒 Warenkorb</h2>
 <div id="cart">Noch leer</div>
-<div class="row">
-<button onclick="submitOrder()">Bestellung abschicken</button>
-</div>
-<p id="message"></p>
+<button id="sendButton" onclick="submitOrder()">Bestellung abschicken</button>
+<p id="orderMessage" role="status"></p>
 </section>
 </div>
 
 <div id="kitchen" hidden>
 <section>
-<h2>👨‍🍳 Küchenbestellungen</h2>
-<p><small>Aktuell nur auf diesem Gerät gespeichert.</small></p>
+<h2>👨‍🍳 Küche</h2>
+<div id="loginArea">
+<p>Mit deinem Küchen-Konto anmelden:</p>
+<div class="row">
+<input id="email" type="email" placeholder="E-Mail-Adresse" autocomplete="username">
+</div>
+<div class="row">
+<input id="password" type="password" placeholder="Passwort" autocomplete="current-password">
+</div>
+<button onclick="kitchenLogin()">Anmelden</button>
+<p id="loginMessage" role="status"></p>
+</div>
+<div id="kitchenArea" hidden>
+<button onclick="kitchenLogout()">Abmelden</button>
+<p id="kitchenMessage" role="status">Bestellungen werden geladen …</p>
 <div id="orders"></div>
+</div>
 </section>
 </div>
 </main>
 
 <script>
 "use strict";
-
 const $=id=>document.getElementById(id);
-
-const imageFile=
-"file_00000000cff8820aa18156f7f4672433.png";
-
+const imageFile="file_00000000cff8820aa18156f7f4672433.png";
 const sheetUrl="./"+imageFile;
 
-/*
- Bildtafel:
- 4 Bilder oben,
- 5 Bilder in der Mitte,
- 6 Bilder unten.
- Die Ausschnitte werden per CSS angezeigt.
-*/
 const positions={
- Chickenburger:[0,0,4,3],
- Beafburger:[1,0,4,3],
- "Chicken Nuggets":[2,0,4,3],
- Pommes:[3,0,4,3],
- "Coca-Cola":[0,1,5,3],
- Fanta:[1,1,5,3],
- Eistee:[2,1,5,3],
- "Wasser mit Kohlensäure":[3,1,5,3],
- "Wasser ohne Kohlensäure":[4,1,5,3],
- Vanille:[0,2,6,3],
- Schoko:[1,2,6,3],
- Kaffee:[2,2,6,3],
- Streusel:[3,2,6,3],
- Ovo:[4,2,6,3],
- Rahm:[5,2,6,3]
+"Chickenburger":[0,0,4,3],
+"Beafburger":[1,0,4,3],
+"Chicken Nuggets":[2,0,4,3],
+"Pommes":[3,0,4,3],
+"Coca-Cola":[0,1,5,3],
+"Fanta":[1,1,5,3],
+"Eistee":[2,1,5,3],
+"Wasser mit Kohlensäure":[3,1,5,3],
+"Wasser ohne Kohlensäure":[4,1,5,3],
+"Vanille":[0,2,6,3],
+"Schoko":[1,2,6,3],
+"Kaffee":[2,2,6,3],
+"Streusel":[3,2,6,3],
+"Ovo":[4,2,6,3],
+"Rahm":[5,2,6,3]
 };
 
-function picture(name){
- const p=positions[name];
- if(!p)return "";
- const [col,row,cols,rows]=p;
- const x=cols===1?0:col/(cols-1)*100;
- const y=rows===1?0:row/(rows-1)*100;
- return '<div class="picture" role="img" aria-label="'+
- esc(name)+'" style="'+
- '--sheet:url(&quot;'+sheetUrl+'&quot;);'+
- '--sw:'+cols*100+'%;'+
- '--sh:'+rows*100+'%;'+
- '--px:'+x+'%;--py:'+y+'%"></div>';
-}
-
 function esc(s){
- return String(s).replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",
- '"':"&quot;","'":"&#39;"
- }[c]));
+return String(s).replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",
+'"':"&quot;","'":"&#39;"
+}[c]));
 }
-
-const cart=[];
-const storageKey="mcblumenweg_orders";
-let burger="Chickenburger";
-let drink="Coca-Cola";
+function picture(n){
+const p=positions[n];
+if(!p)return "";
+const [col,row,cols,rows]=p;
+const x=col/(cols-1)*100;
+const y=row/(rows-1)*100;
+return '<div class="picture" role="img" aria-label="'+esc(n)+'" style="--sheet:url(&quot;'+sheetUrl+'&quot;);--sw:'+(cols*100)+'%;--sh:'+(rows*100)+'%;--px:'+x+'%;--py:'+y+'%"></div>';
+}
 
 const burgerNames=["Chickenburger","Beafburger"];
-const drinkNames=[
- "Coca-Cola","Fanta","Eistee",
- "Wasser mit Kohlensäure",
- "Wasser ohne Kohlensäure"
-];
+const drinkNames=["Coca-Cola","Fanta","Eistee","Wasser mit Kohlensäure","Wasser ohne Kohlensäure"];
 const iceNames=["Vanille","Schoko","Kaffee"];
 const toppingNames=["Streusel","Ovo","Rahm"];
+let burger=burgerNames[0];
+let drink=drinkNames[0];
 const iceCounts={Vanille:0,Schoko:0,Kaffee:0};
 const toppings=new Set();
+const cart=[];
 
 function renderChoices(id,names,selected,fn){
- $(id).innerHTML=names.map((name,i)=>
- '<button class="tile '+
- (name===selected?'selected':'')+
- '" onclick="'+fn+'('+i+')">'+
- picture(name)+
- '<strong>'+esc(name)+'</strong></button>'
- ).join("");
+$(id).innerHTML=names.map((n,i)=>
+'<button class="tile '+(n===selected?'selected':'')+'" onclick="'+fn+'('+i+')">'+picture(n)+'<strong>'+esc(n)+'</strong></button>'
+).join("");
 }
-
 function chooseBurger(i){
- burger=burgerNames[i];
- renderChoices("burgers",burgerNames,burger,"chooseBurger");
+burger=burgerNames[i];
+renderChoices("burgers",burgerNames,burger,"chooseBurger");
 }
-
 function chooseDrink(i){
- drink=drinkNames[i];
- renderChoices("drinks",drinkNames,drink,"chooseDrink");
+drink=drinkNames[i];
+renderChoices("drinks",drinkNames,drink,"chooseDrink");
 }
-
 function renderIce(){
- $("ice").innerHTML=iceNames.map((n,i)=>
- '<div class="tile">'+picture(n)+
- '<strong>'+esc(n)+'</strong>'+
- '<div class="count">'+
- '<button onclick="changeIce('+i+',-1)">−</button>'+
- '<b>'+iceCounts[n]+'</b>'+
- '<button onclick="changeIce('+i+',1)">+</button>'+
- '</div></div>'
- ).join("");
+$("ice").innerHTML=iceNames.map((n,i)=>
+'<div class="tile">'+picture(n)+'<strong>'+n+'</strong><div class="count"><button onclick="changeIce('+i+',-1)">−</button><b>'+iceCounts[n]+'</b><button onclick="changeIce('+i+',1)">+</button></div></div>'
+).join("");
 }
-
 function changeIce(i,d){
- const n=iceNames[i];
- iceCounts[n]=Math.max(0,Math.min(20,iceCounts[n]+d));
- renderIce();
+const n=iceNames[i];
+iceCounts[n]=Math.max(0,Math.min(20,iceCounts[n]+d));
+renderIce();
 }
-
 function renderToppings(){
- $("toppings").innerHTML=toppingNames.map((n,i)=>
- '<label class="tile '+(toppings.has(n)?'selected':'')+'">'+
- picture(n)+
- '<strong>'+esc(n)+'</strong>'+
- '<input type="checkbox" '+
- (toppings.has(n)?'checked':'')+
- ' onchange="toggleTopping('+i+',this.checked)">'+
- '</label>'
- ).join("");
+$("toppings").innerHTML=toppingNames.map((n,i)=>
+'<label class="tile '+(toppings.has(n)?'selected':'')+'">'+picture(n)+'<strong>'+n+'</strong><input type="checkbox" '+(toppings.has(n)?'checked':'')+' onchange="toggleTopping('+i+',this.checked)"></label>'
+).join("");
 }
-
-function toggleTopping(i,checked){
- const n=toppingNames[i];
- if(checked)toppings.add(n);
- else toppings.delete(n);
- renderToppings();
+function toggleTopping(i,on){
+const n=toppingNames[i];
+if(on)toppings.add(n);else toppings.delete(n);
+renderToppings();
 }
-
-function checked(id){
- return [...$(id).querySelectorAll("input:checked")]
- .map(x=>x.value);
+function selected(id){
+return [...$(id).querySelectorAll("input:checked")].map(x=>x.value);
 }
-
 function qty(id){
- return Math.max(1,Math.min(20,
- Math.floor(Number($(id).value)||1)));
+return Math.max(1,Math.min(20,Math.floor(Number($(id).value)||1)));
 }
-
 function add(item){
- cart.push(item);
- renderCart();
- $("message").textContent="Zum Warenkorb hinzugefügt.";
+cart.push(item);
+renderCart();
+$("orderMessage").textContent="Zum Warenkorb hinzugefügt.";
 }
-
 function addBurger(){
- add({
- name:burger,
- qty:qty("burgerQty"),
- details:"Zutaten: "+
- (checked("ingredients").join(", ")||"keine")+
- " | Saucen: "+
- (checked("sauces").join(", ")||"keine")
- });
+add({name:burger,qty:qty("burgerQty"),
+details:"Zutaten: "+(selected("ingredients").join(", ")||"keine")+" | Saucen: "+(selected("sauces").join(", ")||"keine")});
 }
-
 function addSimple(name,id){
- add({name,qty:qty(id),details:""});
+add({name,qty:qty(id),details:""});
 }
-
 function addDrink(){
- add({name:drink,qty:qty("drinkQty"),details:""});
+add({name:drink,qty:qty("drinkQty"),details:""});
 }
-
 function addIce(){
- const balls=iceNames.filter(n=>iceCounts[n]>0)
- .map(n=>iceCounts[n]+"× "+n);
- if(!balls.length){
- alert("Bitte mindestens eine Eiskugel wählen.");
- return;
- }
- add({
- name:"Glace",
- qty:1,
- details:balls.join(" + ")+" | Toppings: "+
- ([...toppings].join(", ")||"keine")
- });
- iceNames.forEach(n=>iceCounts[n]=0);
- toppings.clear();
- renderIce();
- renderToppings();
+const balls=iceNames.filter(n=>iceCounts[n]>0).map(n=>iceCounts[n]+"× "+n);
+if(!balls.length){alert("Bitte Eiskugeln auswählen.");return}
+add({name:"Glace",qty:1,details:balls.join(" + ")+" | Toppings: "+([...toppings].join(", ")||"keine")});
+iceNames.forEach(n=>iceCounts[n]=0);
+toppings.clear();
+renderIce();
+renderToppings();
 }
-
 function renderCart(){
- $("cart").innerHTML=cart.length?
- cart.map((x,i)=>
- '<div class="item"><b>'+x.qty+'× '+
- esc(x.name)+'</b><p><small>'+
- esc(x.details)+'</small></p>'+
- '<button onclick="removeItem('+i+')">Entfernen</button></div>'
- ).join(""):"Noch leer";
+$("cart").innerHTML=cart.length?cart.map((x,i)=>
+'<div class="item"><b>'+x.qty+'× '+esc(x.name)+'</b><p><small>'+esc(x.details)+'</small></p><button onclick="removeItem('+i+')">Entfernen</button></div>'
+).join(""):"Noch leer";
 }
-
 function removeItem(i){
- cart.splice(i,1);
- renderCart();
+cart.splice(i,1);
+renderCart();
 }
-
-function loadOrders(){
- try{
- const data=JSON.parse(localStorage.getItem(storageKey)||"[]");
- return Array.isArray(data)?data:[];
- }catch(e){return []}
+function showPage(page){
+$("order").hidden=page!=="order";
+$("kitchen").hidden=page!=="kitchen";
+window.scrollTo(0,0);
 }
-
-function saveOrders(orders){
- localStorage.setItem(storageKey,JSON.stringify(orders));
-}
-
 function submitOrder(){
- const name=$("name").value.trim();
- if(!name){
- alert("Bitte Namen eingeben.");
- return;
- }
- if(!cart.length){
- alert("Bitte zuerst Produkte hinzufügen.");
- return;
- }
- try{
- const orders=loadOrders();
- orders.unshift({
- id:Date.now(),
- name,
- items:cart.map(x=>({...x})),
- status:"Neu",
- time:new Date().toLocaleString("de-CH")
- });
- saveOrders(orders);
- cart.length=0;
- renderCart();
- $("message").textContent="Bestellung gespeichert!";
- renderOrders();
- }catch(e){
- alert("Speichern fehlgeschlagen.");
- }
+if(window.sendLiveOrder)window.sendLiveOrder();
+else alert("Firebase wird geladen. Bitte kurz warten.");
 }
-
-function renderOrders(){
- $("orders").innerHTML=loadOrders().map(o=>
- '<div class="item"><h3>'+esc(o.name)+
- ' – '+esc(o.status)+'</h3>'+
- '<small>'+esc(o.time)+'</small>'+
- o.items.map(x=>
- '<p>'+x.qty+'× '+esc(x.name)+
- '<br><small>'+esc(x.details)+'</small></p>'
- ).join("")+
- '<div class="row">'+
- '<button onclick="setStatus('+o.id+',0)">In Zubereitung</button>'+
- '<button onclick="setStatus('+o.id+',1)">Fertig</button>'+
- '</div></div>'
- ).join("")||"Noch keine Bestellungen";
+function kitchenLogin(){
+if(window.liveLogin)window.liveLogin();
+else alert("Firebase wird geladen.");
 }
-
-function setStatus(id,s){
- saveOrders(loadOrders().map(o=>
- o.id===id?{
- ...o,status:s===0?"In Zubereitung":"Fertig"
- }:o
- ));
- renderOrders();
+function kitchenLogout(){
+if(window.liveLogout)window.liveLogout();
 }
-
-function show(page){
- $("order").hidden=page!=="order";
- $("kitchen").hidden=page!=="kitchen";
- if(page==="kitchen")renderOrders();
- window.scrollTo(0,0);
+function changeStatus(id,status){
+if(window.liveStatus)window.liveStatus(id,status);
 }
-
-$("nuggetPicture").innerHTML=
- '<div style="max-width:180px">'+
- picture("Chicken Nuggets")+'</div>';
-$("friesPicture").innerHTML=
- '<div style="max-width:180px">'+
- picture("Pommes")+'</div>';
-
+function renderOrders(orders){
+$("orders").innerHTML=orders.length?orders.map(o=>
+'<div class="item"><h3>'+esc(o.name)+' – '+esc(o.status)+'</h3><small>'+esc(o.time)+'</small>'+
+o.items.map(x=>'<p>'+esc(x.qty)+'× '+esc(x.name)+'<br><small>'+esc(x.details||"")+'</small></p>').join("")+
+'<div class="row"><button data-id="'+esc(o.id)+'" data-status="In Zubereitung" class="statusButton">In Zubereitung</button><button data-id="'+esc(o.id)+'" data-status="Fertig" class="statusButton">Fertig</button></div></div>'
+).join(""):"Noch keine Bestellungen";
+}
+$("orders").addEventListener("click",e=>{
+const b=e.target.closest(".statusButton");
+if(b)changeStatus(b.dataset.id,b.dataset.status);
+});
+$("nuggetPicture").innerHTML=picture("Chicken Nuggets");
+$("friesPicture").innerHTML=picture("Pommes");
 chooseBurger(0);
 chooseDrink(0);
 renderIce();
 renderToppings();
 renderCart();
-renderOrders();
+</script>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import {getAuth,signInAnonymously,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import {getFirestore,collection,addDoc,serverTimestamp,query,orderBy,onSnapshot,doc,updateDoc} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const config={
+apiKey:"AIzaSyDw8SA9rWUkAVxB3zirrqQMUkXRkvvLnm8",
+authDomain:"mc-blumenweg-bde6f.firebaseapp.com",
+projectId:"mc-blumenweg-bde6f",
+storageBucket:"mc-blumenweg-bde6f.firebasestorage.app",
+messagingSenderId:"339533713341",
+appId:"1:339533713341:web:06cd3d1415a6839f4f0cd4",
+measurementId:"G-5NEG3HZF2V"
+};
+
+const app=initializeApp(config);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const kitchenUid="rkIN2njKOcXqMQdAHbZsYiXvPLA3";
+const $=id=>document.getElementById(id);
+let stopListening=null;
+
+window.sendLiveOrder=async()=>{
+const name=$("customerName").value.trim();
+if(!name){alert("Bitte Namen eingeben.");return}
+if(!cart.length){alert("Bitte Produkte hinzufügen.");return}
+const button=$("sendButton");
+button.disabled=true;
+$("orderMessage").textContent="Bestellung wird gesendet …";
+try{
+let user=auth.currentUser;
+if(!user)user=(await signInAnonymously(auth)).user;
+if(user.uid===kitchenUid)throw Error("Bitte zum Bestellen ein anderes Gerät verwenden.");
+await addDoc(collection(db,"bestellungen"),{
+name,
+artikel:cart.map(x=>({...x})),
+status:"Neu",
+erstellt:serverTimestamp(),
+kundeUid:user.uid
+});
+cart.length=0;
+renderCart();
+$("orderMessage").textContent="✅ Bestellung erfolgreich gesendet!";
+}catch(e){
+$("orderMessage").textContent="❌ Nicht gesendet: "+e.message;
+}finally{button.disabled=false}
+};
+
+window.liveLogin=async()=>{
+$("loginMessage").textContent="Anmeldung läuft …";
+try{
+await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value);
+if(auth.currentUser.uid!==kitchenUid){
+await signOut(auth);
+throw Error("Dieses Konto ist nicht als Küche freigegeben.");
+}
+$("password").value="";
+$("loginMessage").textContent="";
+}catch(e){
+$("loginMessage").textContent="Anmeldung fehlgeschlagen: "+e.message;
+}
+};
+
+window.liveLogout=async()=>{
+if(stopListening){stopListening();stopListening=null}
+await signOut(auth);
+};
+
+function listen(){
+if(stopListening)return;
+$("kitchenMessage").textContent="Bestellungen werden geladen …";
+stopListening=onSnapshot(
+query(collection(db,"bestellungen"),orderBy("erstellt","desc")),
+snapshot=>{
+const orders=snapshot.docs.map(d=>{
+const x=d.data();
+return {
+id:d.id,
+name:x.name||"Unbekannt",
+status:x.status||"Neu",
+items:Array.isArray(x.artikel)?x.artikel:[],
+time:x.erstellt?.toDate().toLocaleString("de-CH")||"Gerade eben"
+};
+});
+renderOrders(orders);
+$("kitchenMessage").textContent=orders.length+" Bestellungen";
+},
+error=>{
+$("kitchenMessage").textContent="Fehler beim Laden: "+error.message;
+});
+}
+
+window.liveStatus=async(id,status)=>{
+try{
+await updateDoc(doc(db,"bestellungen",id),{status});
+}catch(e){
+$("kitchenMessage").textContent="Status nicht gespeichert: "+e.message;
+}
+};
+
+onAuthStateChanged(auth,user=>{
+const kitchen=!!user&&user.uid===kitchenUid;
+$("loginArea").hidden=kitchen;
+$("kitchenArea").hidden=!kitchen;
+if(kitchen)listen();
+else{
+if(stopListening){stopListening();stopListening=null}
+renderOrders([]);
+}
+});
 </script>
 </body>
 </html>
