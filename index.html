@@ -6,534 +6,1409 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MC Blumenweg</title>
 <style>
-:root{font-family:system-ui,Arial,sans-serif;color:#242424;background:#fff8ed}
-*{box-sizing:border-box}
-body{margin:0}
-header{background:#c62828;color:white;padding:16px;text-align:center}
-header h1{margin:0;font-size:28px}
-header p{margin:4px 0 0}
-main{max-width:760px;margin:auto;padding:14px}
-h2{margin:14px 0}
-h3{margin:16px 0 8px}
-.panel{background:white;border-radius:15px;padding:15px;margin:12px 0;box-shadow:0 2px 10px #0001}
-.menuGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
-.menuTile{border:0;border-radius:18px;background:white;padding:25px 14px;font-size:22px;font-weight:750;box-shadow:0 2px 10px #0002;cursor:pointer}
-.menuTile small{display:block;font-size:13px;font-weight:400;margin-top:7px}
-.btn{border:0;background:#c62828;color:white;border-radius:10px;padding:12px 15px;font-size:16px;font-weight:700;cursor:pointer;margin:4px 4px 4px 0}
-.btn.alt{background:#555}
-.btn.green{background:#278047}
-.btn.orange{background:#e18b18}
-.btn:disabled{opacity:.55}
-.choice{display:inline-flex;align-items:center;gap:7px;padding:9px 11px;border:1px solid #ddd;border-radius:10px;margin:4px;background:#fafafa}
-.choice input{accent-color:#c62828}
-.qty{width:75px;padding:10px;border:1px solid #ccc;border-radius:8px;font-size:16px}
-.field{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;font-size:16px;margin:5px 0}
-.item{border-top:1px solid #eee;padding:12px 0}
-.item:first-child{border-top:0}
-.itemTop{display:flex;align-items:center;gap:12px}
-.muted{color:#666;font-size:14px}
-.cartLine{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #eee}
-.cartLine button{border:0;background:#eee;border-radius:8px;padding:7px}
-[hidden]{display:none!important}
-.orderCard{padding:15px;margin:12px 0;border-radius:13px;border:2px solid #d32f2f;background:#fff0f0}
-.orderCard.zubereitung{border-color:#ed9b1d;background:#fff3df}
-.orderCard.fertig{border-color:#36a15a;background:#eaffee}
-.orderCard.fertig .orderContent{text-decoration:line-through;opacity:.65}
-.orderHead{font-weight:800;font-size:20px}
-.status{font-weight:700}
-.msg{font-weight:700;margin:12px 0;white-space:pre-wrap}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.cartBadge{background:#f6d87c;color:#2d2500;border-radius:30px;padding:7px 12px;font-weight:700}
-footer{text-align:center;padding:25px;color:#777;font-size:13px}
+:root {
+  font-family: system-ui, Arial, sans-serif;
+  color: #242424;
+  background: #fff8ed;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+header {
+  background: #c62828;
+  color: white;
+  padding: 16px;
+  text-align: center;
+}
+header h1 { margin: 0; font-size: 28px; }
+header p { margin: 4px 0 0; }
+main { max-width: 760px; margin: auto; padding: 14px; }
+h2 { margin: 14px 0; }
+h3 { margin: 16px 0 8px; }
 
-/* Produktbilder aus der vorhandenen Bilddatei */
-.foodPhoto{
-width:105px;
-height:105px;
-flex-shrink:0;
-border-radius:14px;
-background-image:url('file_00000000cff8820aa18156f7f4672433.png');
-background-repeat:no-repeat;
-background-size:400% 300%;
-background-color:#f5e7d3;
-border:1px solid #eee;
+.panel {
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  margin: 12px 0;
+  box-shadow: 0 2px 10px #0001;
 }
-.photoGrid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(135px,1fr));
-gap:12px;
-margin:10px 0;
+.menuGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
+  gap: 12px;
 }
-.photoChoice{
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:8px;
-border:2px solid #eee;
-border-radius:14px;
-padding:12px 7px;
-background:#fff;
-cursor:pointer;
-text-align:center;
-font-weight:650;
+.menuTile {
+  border: 0;
+  border-radius: 18px;
+  background: white;
+  padding: 25px 14px;
+  font-size: 22px;
+  font-weight: 750;
+  box-shadow: 0 2px 10px #0002;
+  cursor: pointer;
 }
-.photoChoice:has(input:checked){border-color:#c62828;background:#fff3ed}
-.photoChoice input{accent-color:#c62828}
-.photoChoice .foodPhoto{width:115px;height:105px}
-.photoChoice .emoji{font-size:50px;min-height:105px;display:flex;align-items:center}
-.icePhoto{display:inline-block;width:80px;height:80px;vertical-align:middle;margin-right:10px}
-@media(max-width:430px){
-.photoGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
-.photoChoice .foodPhoto{width:100px;height:95px}
+.menuTile small {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 7px;
+}
+.btn {
+  border: 0;
+  background: #c62828;
+  color: white;
+  border-radius: 10px;
+  padding: 12px 15px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 4px 4px 4px 0;
+}
+.btn.alt { background: #555; }
+.btn.green { background: #278047; }
+.btn.orange { background: #e18b18; }
+.btn:disabled { opacity: .55; }
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 11px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin: 4px;
+  background: #fafafa;
+}
+.choice input { accent-color: #c62828; }
+
+.qty {
+  width: 75px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+.field {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  margin: 5px 0;
+}
+.item {
+  border-top: 1px solid #eee;
+  padding: 12px 0;
+}
+.item:first-child { border-top: 0; }
+.itemTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.muted { color: #666; font-size: 14px; }
+
+.cartLine {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid #eee;
+}
+.cartLine button {
+  border: 0;
+  background: #eee;
+  border-radius: 8px;
+  padding: 7px;
+}
+[hidden] { display: none !important; }
+
+.orderCard {
+  padding: 15px;
+  margin: 12px 0;
+  border-radius: 13px;
+  border: 2px solid #d32f2f;
+  background: #fff0f0;
+}
+.orderCard.zubereitung {
+  border-color: #ed9b1d;
+  background: #fff3df;
+}
+.orderCard.fertig {
+  border-color: #36a15a;
+  background: #eaffee;
+}
+.orderCard.fertig .orderContent {
+  text-decoration: line-through;
+  opacity: .65;
+}
+.orderHead { font-weight: 800; font-size: 20px; }
+.status { font-weight: 700; }
+.msg {
+  font-weight: 700;
+  margin: 12px 0;
+  white-space: pre-wrap;
+}
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cartBadge {
+  background: #f6d87c;
+  color: #2d2500;
+  border-radius: 30px;
+  padding: 7px 12px;
+  font-weight: 700;
+}
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #777;
+  font-size: 13px;
+}
+
+/*
+  Die vorhandene Bilddatei enthält 12 Bilder
+  in einem Raster mit 4 Spalten und 3 Zeilen.
+
+  Jedes Bild bekommt eine eigene Zelle.
+  Der Ausschnitt wird unabhängig von der
+  sichtbaren Grösse berechnet.
+*/
+.foodPhoto {
+  position: relative;
+  display: inline-block;
+  width: 105px;
+  height: 105px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #eee;
+  background: #fff;
+}
+.foodPhoto img {
+  position: absolute;
+  width: 400%;
+  height: 300%;
+  max-width: none;
+  object-fit: fill;
+}
+.foodPhoto[data-col="0"] img { left: 0%; }
+.foodPhoto[data-col="1"] img { left: -100%; }
+.foodPhoto[data-col="2"] img { left: -200%; }
+.foodPhoto[data-col="3"] img { left: -300%; }
+
+.foodPhoto[data-row="0"] img { top: 0%; }
+.foodPhoto[data-row="1"] img { top: -100%; }
+.foodPhoto[data-row="2"] img { top: -200%; }
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(135px,1fr));
+  gap: 12px;
+  margin: 10px 0;
+}
+.photoChoice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border: 2px solid #eee;
+  border-radius: 14px;
+  padding: 12px 7px;
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 650;
+}
+.photoChoice:has(input:checked) {
+  border-color: #c62828;
+  background: #fff3ed;
+}
+.photoChoice input { accent-color: #c62828; }
+.photoChoice .foodPhoto {
+  width: 115px;
+  height: 105px;
+}
+.photoChoice .emoji {
+  font-size: 50px;
+  min-height: 105px;
+  display: flex;
+  align-items: center;
+}
+.icePhoto {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+@media(max-width:430px) {
+  .photoGrid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .photoChoice .foodPhoto {
+    width: 100px;
+    height: 95px;
+  }
 }
 </style>
 </head>
 <body>
+
 <header>
 <h1>🍔 MC Blumenweg</h1>
 <p>Frisch bestellt – mit Liebe gemacht ❤️</p>
 </header>
+
 <main>
+
 <section id="shop">
+
 <div class="panel">
 <label for="customerName"><b>Dein Name</b></label>
-<input id="customerName" class="field" maxlength="80" placeholder="Wie heisst du?">
+<input
+  id="customerName"
+  class="field"
+  maxlength="80"
+  placeholder="Wie heisst du?"
+>
 </div>
 
 <div id="home">
 <h2>Was möchtest du bestellen?</h2>
 <div class="menuGrid">
-<button class="menuTile" onclick="openMenu('main')">🍔 Hauptmenü<small>Burger, Nuggets & Pommes</small></button>
-<button class="menuTile" onclick="openMenu('drinks')">🥤 Getränke<small>Kalte & heisse Getränke</small></button>
-<button class="menuTile" onclick="openMenu('dessert')">🍨 Dessert<small>Glace & Toppings</small></button>
+
+<button class="menuTile" onclick="openMenu('main')">
+🍔 Hauptmenü
+<small>Burger, Nuggets & Pommes</small>
+</button>
+
+<button class="menuTile" onclick="openMenu('drinks')">
+🥤 Getränke
+<small>Kalte & heisse Getränke</small>
+</button>
+
+<button class="menuTile" onclick="openMenu('dessert')">
+🍨 Dessert
+<small>Glace & Toppings</small>
+</button>
+
 </div>
 </div>
 
+<!-- HAUPTMENÜ -->
+
 <div id="mainMenu" hidden>
+
 <div class="topbar">
-<button class="btn alt" onclick="openMenu('home')">⬅ Zurück zur Auswahl</button>
-<span class="cartBadge" id="mainBadge">🛒 0 Artikel</span>
+<button class="btn alt" onclick="openMenu('home')">
+⬅ Zurück zur Auswahl
+</button>
+<span class="cartBadge" id="mainBadge">
+🛒 0 Artikel
+</span>
 </div>
+
 <h2>🍔 Hauptmenü</h2>
+
 <div class="panel">
 <h3>Burger auswählen</h3>
 <div id="burgers" class="photoGrid"></div>
+
 <h3>Wähle deine Zutaten</h3>
 <div id="ingredients"></div>
+
 <h3>Wähle deine Sauce</h3>
 <div id="sauces"></div>
-<label>Menge <input id="burgerQty" class="qty" type="number" min="1" max="30" value="1"></label>
-<div><button class="btn" onclick="addBurger()">🍔 Burger hinzufügen</button></div>
-</div>
-<div class="panel">
-<div class="itemTop">
-<div class="foodPhoto" style="background-position:66.666% 0%"></div>
-<div><h3>Chicken Nuggets</h3><label>Menge <input id="nuggetsQty" class="qty" type="number" min="1" max="30" value="1"></label></div>
-</div>
-<button class="btn" onclick="addSimple('Chicken Nuggets','nuggetsQty')">Hinzufügen</button>
-</div>
-<div class="panel">
-<div class="itemTop">
-<div class="foodPhoto" style="background-position:100% 0%"></div>
-<div><h3>Pommes</h3><label>Menge <input id="friesQty" class="qty" type="number" min="1" max="30" value="1"></label></div>
-</div>
-<button class="btn" onclick="addSimple('Pommes','friesQty')">Hinzufügen</button>
+
+<label>
+Menge
+<input
+  id="burgerQty"
+  class="qty"
+  type="number"
+  min="1"
+  max="30"
+  value="1"
+>
+</label>
+
+<div>
+<button class="btn" onclick="addBurger()">
+🍔 Burger hinzufügen
+</button>
 </div>
 </div>
 
-<div id="drinksMenu" hidden>
-<div class="topbar">
-<button class="btn alt" onclick="openMenu('home')">⬅ Zurück zur Auswahl</button>
-<span class="cartBadge" id="drinksBadge">🛒 0 Artikel</span>
+<div class="panel">
+<div class="itemTop">
+<div id="nuggetPicture"></div>
+<div>
+<h3>Chicken Nuggets</h3>
+<label>
+Menge
+<input
+  id="nuggetsQty"
+  class="qty"
+  type="number"
+  min="1"
+  max="30"
+  value="1"
+>
+</label>
 </div>
+</div>
+<button
+  class="btn"
+  onclick="addSimple('Chicken Nuggets','nuggetsQty')"
+>
+Hinzufügen
+</button>
+</div>
+
+<div class="panel">
+<div class="itemTop">
+<div id="friesPicture"></div>
+<div>
+<h3>Pommes</h3>
+<label>
+Menge
+<input
+  id="friesQty"
+  class="qty"
+  type="number"
+  min="1"
+  max="30"
+  value="1"
+>
+</label>
+</div>
+</div>
+<button
+  class="btn"
+  onclick="addSimple('Pommes','friesQty')"
+>
+Hinzufügen
+</button>
+</div>
+
+</div>
+
+<!-- GETRÄNKE -->
+
+<div id="drinksMenu" hidden>
+
+<div class="topbar">
+<button class="btn alt" onclick="openMenu('home')">
+⬅ Zurück zur Auswahl
+</button>
+<span class="cartBadge" id="drinksBadge">
+🛒 0 Artikel
+</span>
+</div>
+
 <h2>🥤 Getränke</h2>
+
 <div class="panel">
 <h3>Kalte Getränke</h3>
 <div id="drinks" class="photoGrid"></div>
-<label>Menge <input id="drinkQty" class="qty" type="number" min="1" max="30" value="1"></label>
-<div><button class="btn" onclick="addDrink()">🥤 Getränk hinzufügen</button></div>
+
+<label>
+Menge
+<input
+  id="drinkQty"
+  class="qty"
+  type="number"
+  min="1"
+  max="30"
+  value="1"
+>
+</label>
+
+<div>
+<button class="btn" onclick="addDrink()">
+🥤 Getränk hinzufügen
+</button>
 </div>
+</div>
+
 <div class="panel">
 <h3>Heisse Getränke</h3>
 <div id="hotDrinks" class="photoGrid"></div>
-<p class="muted">Beim Tee kannst du die Sorte aus unserer Teebox auswählen.</p>
-<label>Menge <input id="hotQty" class="qty" type="number" min="1" max="30" value="1"></label>
-<div><button class="btn" onclick="addHotDrink()">☕ Getränk hinzufügen</button></div>
+
+<p class="muted">
+Beim Tee kannst du die Sorte aus unserer Teebox auswählen.
+</p>
+
+<label>
+Menge
+<input
+  id="hotQty"
+  class="qty"
+  type="number"
+  min="1"
+  max="30"
+  value="1"
+>
+</label>
+
+<div>
+<button class="btn" onclick="addHotDrink()">
+☕ Getränk hinzufügen
+</button>
 </div>
 </div>
+
+</div>
+
+<!-- DESSERT -->
 
 <div id="dessertMenu" hidden>
+
 <div class="topbar">
-<button class="btn alt" onclick="openMenu('home')">⬅ Zurück zur Auswahl</button>
-<span class="cartBadge" id="dessertBadge">🛒 0 Artikel</span>
+<button class="btn alt" onclick="openMenu('home')">
+⬅ Zurück zur Auswahl
+</button>
+<span class="cartBadge" id="dessertBadge">
+🛒 0 Artikel
+</span>
 </div>
+
 <h2>🍨 Dessert</h2>
+
 <div class="panel">
+
 <h3>Glace – Kugeln wählen</h3>
-<p class="muted">Du kannst verschiedene Sorten mischen.</p>
+
+<p class="muted">
+Du kannst verschiedene Sorten mischen.
+</p>
+
 <div id="ice"></div>
+
 <h3>Toppings</h3>
 <div id="toppings"></div>
-<button class="btn" onclick="addIce()">🍨 Glace hinzufügen</button>
+
+<button class="btn" onclick="addIce()">
+🍨 Glace hinzufügen
+</button>
+
 </div>
 </div>
+
+<!-- WARENKORB -->
 
 <div class="panel" id="cartPanel">
+
 <div class="topbar">
 <h2>🛒 Warenkorb</h2>
-<span class="cartBadge" id="cartCount">0 Artikel</span>
+<span class="cartBadge" id="cartCount">
+0 Artikel
+</span>
 </div>
+
 <div id="cart"></div>
-<button class="btn green" id="sendButton" onclick="sendLiveOrder()">✅ Bestellung abschicken</button>
-<div class="msg" id="orderMessage" aria-live="polite"></div>
+
+<button
+  class="btn green"
+  id="sendButton"
+  onclick="sendLiveOrder()"
+>
+✅ Bestellung abschicken
+</button>
+
+<div
+  class="msg"
+  id="orderMessage"
+  aria-live="polite"
+></div>
+
 </div>
+
 </section>
 
+<!-- KÜCHE -->
+
 <section id="kitchen" hidden>
+
 <div class="topbar">
 <h2>👨‍🍳 Küche</h2>
-<button class="btn alt" onclick="showShop()">⬅ Zur Bestellung</button>
+<button class="btn alt" onclick="showShop()">
+⬅ Zur Bestellung
+</button>
 </div>
+
 <div id="loginArea" class="panel">
+
 <h3>Küchen-Login</h3>
-<input id="email" class="field" type="email" placeholder="E-Mail">
-<input id="password" class="field" type="password" placeholder="Passwort">
-<button class="btn" onclick="liveLogin()">Anmelden</button>
+
+<input
+  id="email"
+  class="field"
+  type="email"
+  placeholder="E-Mail"
+>
+
+<input
+  id="password"
+  class="field"
+  type="password"
+  placeholder="Passwort"
+>
+
+<button class="btn" onclick="liveLogin()">
+Anmelden
+</button>
+
 <div class="msg" id="loginMessage"></div>
+
 </div>
+
 <div id="kitchenArea" hidden>
-<button class="btn alt" onclick="liveLogout()">Abmelden</button>
+
+<button class="btn alt" onclick="liveLogout()">
+Abmelden
+</button>
+
 <div id="kitchenMessage" class="msg"></div>
+
 <div id="orders"></div>
+
 </div>
+
 </section>
 
 <div style="text-align:center">
-<button class="btn alt" onclick="showKitchen()">🔒 Küchenansicht</button>
+<button class="btn alt" onclick="showKitchen()">
+🔒 Küchenansicht
+</button>
 </div>
+
 </main>
+
 <footer>MC Blumenweg ❤️</footer>
 
 <script>
-const $=id=>document.getElementById(id);
-const cart=[];
-let selectedBurger='Chickenburger';
-let selectedDrink='Coca-Cola';
-let selectedHot='Cappuccino';
-const iceCounts={Vanille:0,Schoko:0,Kaffee:0};
 
-const photoPositions={
-'Chickenburger':'0% 0%',
-'Beafburger':'33.333% 0%',
-'Chicken Nuggets':'66.666% 0%',
-'Pommes':'100% 0%',
-'Coca-Cola':'0% 50%',
-'Fanta':'33.333% 50%',
-'Eistee':'66.666% 50%',
-'Wasser mit Kohlensäure':'100% 50%',
-'Wasser ohne Kohlensäure':'0% 100%',
-'Vanille':'33.333% 100%',
-'Schoko':'66.666% 100%',
-'Kaffee':'100% 100%'
+const $ = id => document.getElementById(id);
+
+const cart = [];
+
+let selectedBurger = 'Chickenburger';
+let selectedDrink = 'Coca-Cola';
+let selectedHot = 'Cappuccino';
+
+const iceCounts = {
+  Vanille: 0,
+  Schoko: 0,
+  Kaffee: 0
 };
 
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({
-'&':'&amp;',
-'<':'&lt;',
-'>':'&gt;',
-'"':'&quot;',
-"'":'&#39;'
-}[c]));
+const imageFile =
+  'file_00000000cff8820aa18156f7f4672433.png';
 
-function photo(name,extraClass=''){
-return `<span class="foodPhoto ${extraClass}" role="img" aria-label="${esc(name)}" style="background-position:${photoPositions[name]||'center'}"></span>`;
+/*
+  Bildpositionen:
+  Spalte 0 bis 3, Zeile 0 bis 2.
+*/
+const photoCells = {
+  'Chickenburger': [0,0],
+  'Beafburger': [1,0],
+  'Chicken Nuggets': [2,0],
+  'Pommes': [3,0],
+
+  'Coca-Cola': [0,1],
+  'Fanta': [1,1],
+  'Eistee': [2,1],
+  'Wasser mit Kohlensäure': [3,1],
+
+  'Wasser ohne Kohlensäure': [0,2],
+  'Vanille': [1,2],
+  'Schoko': [2,2],
+  'Kaffee': [3,2]
+};
+
+function esc(s) {
+  return String(s ?? '').replace(
+    /[&<>"']/g,
+    c => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[c])
+  );
 }
 
-function choices(id,values,type,selected,change){
-$(id).innerHTML=values.map(v=>`<label class="choice"><input type="${type}" name="${id}" value="${esc(v)}" ${type==='radio'&&v===selected?'checked':''} ${change?`onchange="${change}(this.value)"`:''}>${esc(v)}</label>`).join('');
+function photo(name, extraClass = '') {
+  const cell = photoCells[name];
+
+  if (!cell) return '';
+
+  const [col,row] = cell;
+
+  return `
+    <span
+      class="foodPhoto ${extraClass}"
+      data-col="${col}"
+      data-row="${row}"
+      role="img"
+      aria-label="${esc(name)}"
+    >
+      <img
+        src="${imageFile}"
+        alt=""
+        loading="lazy"
+      >
+    </span>
+  `;
 }
 
-function photoChoices(id,values,selected,change,emojis={}){
-$(id).innerHTML=values.map(v=>`<label class="photoChoice">
-${photoPositions[v]?photo(v):`<span class="emoji">${emojis[v]||'🥤'}</span>`}
-<span>${esc(v)}</span>
-<input type="radio" name="${id}" value="${esc(v)}" ${v===selected?'checked':''} onchange="${change}(this.value)">
-</label>`).join('');
+function choices(
+  id,
+  values,
+  type,
+  selectedValue,
+  change
+) {
+  $(id).innerHTML = values.map(v => `
+    <label class="choice">
+      <input
+        type="${type}"
+        name="${id}"
+        value="${esc(v)}"
+        ${type === 'radio' && v === selectedValue
+          ? 'checked'
+          : ''}
+        ${change
+          ? `onchange="${change}(this.value)"`
+          : ''}
+      >
+      ${esc(v)}
+    </label>
+  `).join('');
 }
 
-photoChoices('burgers',['Chickenburger','Beafburger'],selectedBurger,'chooseBurger');
-choices('ingredients',['Gurken','Zwiebeln','Salat','Tomaten','Käse'],'checkbox');
-choices('sauces',['BigMac Sauce','Cocktail','Ketchup','Mayonnaise'],'checkbox');
-photoChoices('drinks',['Coca-Cola','Fanta','Eistee','Wasser mit Kohlensäure','Wasser ohne Kohlensäure'],selectedDrink,'chooseDrink');
-photoChoices('hotDrinks',['Cappuccino','Espresso','Tee'],selectedHot,'chooseHotDrink',{Cappuccino:'☕',Espresso:'☕',Tee:'🫖'});
-choices('toppings',['Streusel','Ovo','Rahm'],'checkbox');
+function photoChoices(
+  id,
+  values,
+  selectedValue,
+  change,
+  emojis = {}
+) {
+  $(id).innerHTML = values.map(v => `
+    <label class="photoChoice">
+      ${photoCells[v]
+        ? photo(v)
+        : `<span class="emoji">${emojis[v] || '🥤'}</span>`
+      }
 
-function chooseBurger(v){selectedBurger=v}
-function chooseDrink(v){selectedDrink=v}
-function chooseHotDrink(v){selectedHot=v}
+      <span>${esc(v)}</span>
 
-function renderIce(){
-$('ice').innerHTML=Object.keys(iceCounts).map(n=>`<div class="item">
-${photo(n,'icePhoto')}
-<b>${esc(n)}</b>
-<button class="btn alt" onclick="changeIce('${n}',-1)">−</button>
-<b>${iceCounts[n]}</b>
-<button class="btn" onclick="changeIce('${n}',1)">+</button>
-</div>`).join('');
+      <input
+        type="radio"
+        name="${id}"
+        value="${esc(v)}"
+        ${v === selectedValue ? 'checked' : ''}
+        onchange="${change}(this.value)"
+      >
+    </label>
+  `).join('');
 }
 
-function changeIce(n,d){
-iceCounts[n]=Math.max(0,Math.min(20,iceCounts[n]+d));
+photoChoices(
+  'burgers',
+  ['Chickenburger','Beafburger'],
+  selectedBurger,
+  'chooseBurger'
+);
+
+/* Speck ist jetzt zusätzlich auswählbar */
+choices(
+  'ingredients',
+  [
+    'Gurken',
+    'Zwiebeln',
+    'Salat',
+    'Tomaten',
+    'Käse',
+    'Speck'
+  ],
+  'checkbox'
+);
+
+choices(
+  'sauces',
+  [
+    'BigMac Sauce',
+    'Cocktail',
+    'Ketchup',
+    'Mayonnaise'
+  ],
+  'checkbox'
+);
+
+$('nuggetPicture').innerHTML =
+  photo('Chicken Nuggets');
+
+$('friesPicture').innerHTML =
+  photo('Pommes');
+
+photoChoices(
+  'drinks',
+  [
+    'Coca-Cola',
+    'Fanta',
+    'Eistee',
+    'Wasser mit Kohlensäure',
+    'Wasser ohne Kohlensäure'
+  ],
+  selectedDrink,
+  'chooseDrink'
+);
+
+photoChoices(
+  'hotDrinks',
+  [
+    'Cappuccino',
+    'Espresso',
+    'Tee'
+  ],
+  selectedHot,
+  'chooseHotDrink',
+  {
+    Cappuccino: '☕',
+    Espresso: '☕',
+    Tee: '🫖'
+  }
+);
+
+choices(
+  'toppings',
+  [
+    'Streusel',
+    'Ovo',
+    'Rahm'
+  ],
+  'checkbox'
+);
+
+function chooseBurger(v) {
+  selectedBurger = v;
+}
+
+function chooseDrink(v) {
+  selectedDrink = v;
+}
+
+function chooseHotDrink(v) {
+  selectedHot = v;
+}
+
+function renderIce() {
+  $('ice').innerHTML =
+    Object.keys(iceCounts).map(n => `
+      <div class="item">
+        ${photo(n,'icePhoto')}
+
+        <b>${esc(n)}</b>
+
+        <button
+          class="btn alt"
+          onclick="changeIce('${n}',-1)"
+        >−</button>
+
+        <b>${iceCounts[n]}</b>
+
+        <button
+          class="btn"
+          onclick="changeIce('${n}',1)"
+        >+</button>
+      </div>
+    `).join('');
+}
+
+function changeIce(n,d) {
+  iceCounts[n] = Math.max(
+    0,
+    Math.min(20,iceCounts[n] + d)
+  );
+
+  renderIce();
+}
+
 renderIce();
-}
-renderIce();
 
-function selected(id){
-return [...document.querySelectorAll('#'+id+' input:checked')].map(x=>x.value);
-}
-
-function qty(id){
-const n=Number($(id).value);
-return Number.isInteger(n)&&n>=1&&n<=30?n:null;
+function selected(id) {
+  return [
+    ...document.querySelectorAll(
+      '#' + id + ' input:checked'
+    )
+  ].map(x => x.value);
 }
 
-function add(name,amount,details=''){
-if(!amount){alert('Bitte eine Menge von 1 bis 30 wählen.');return}
-cart.push({name,qty:amount,details});
+function qty(id) {
+  const n = Number($(id).value);
+
+  return Number.isInteger(n)
+    && n >= 1
+    && n <= 30
+    ? n
+    : null;
+}
+
+function add(name,amount,details = '') {
+  if (!amount) {
+    alert('Bitte eine Menge von 1 bis 30 wählen.');
+    return;
+  }
+
+  cart.push({
+    name,
+    qty: amount,
+    details
+  });
+
+  renderCart();
+
+  $('orderMessage').textContent =
+    'Zum Warenkorb hinzugefügt.';
+}
+
+function addBurger() {
+  const z = selected('ingredients');
+  const s = selected('sauces');
+
+  add(
+    selectedBurger,
+    qty('burgerQty'),
+    `Zutaten: ${z.length ? z.join(', ') : 'Keine'}; ` +
+    `Sauce: ${s.length ? s.join(', ') : 'Keine'}`
+  );
+}
+
+function addSimple(name,id) {
+  add(name,qty(id));
+}
+
+function addDrink() {
+  add(selectedDrink,qty('drinkQty'));
+}
+
+function addHotDrink() {
+  add(selectedHot,qty('hotQty'));
+}
+
+function addIce() {
+  const balls = Object.entries(iceCounts)
+    .filter(([,n]) => n > 0);
+
+  const total = balls.reduce(
+    (a,[,n]) => a + n,
+    0
+  );
+
+  if (!total) {
+    alert('Bitte mindestens eine Kugel auswählen.');
+    return;
+  }
+
+  const toppings = selected('toppings');
+
+  const details =
+    balls.map(
+      ([n,c]) => `${c}× ${n}`
+    ).join(', ')
+    +
+    (toppings.length
+      ? `; Toppings: ${toppings.join(', ')}`
+      : '');
+
+  add('Glace',1,details);
+
+  Object.keys(iceCounts).forEach(
+    k => iceCounts[k] = 0
+  );
+
+  renderIce();
+}
+
+function renderCart() {
+  const count = cart.reduce(
+    (a,x) => a + x.qty,
+    0
+  );
+
+  $('cartCount').textContent =
+    count + ' Artikel';
+
+  [
+    'mainBadge',
+    'drinksBadge',
+    'dessertBadge'
+  ].forEach(id => {
+    $(id).textContent =
+      '🛒 ' + count + ' Artikel';
+  });
+
+  $('cart').innerHTML = cart.length
+    ? cart.map((x,i) => `
+      <div class="cartLine">
+        <div>
+          <b>${x.qty}× ${esc(x.name)}</b>
+          ${x.details
+            ? `<div class="muted">${esc(x.details)}</div>`
+            : ''}
+        </div>
+
+        <button
+          onclick="removeItem(${i})"
+          aria-label="Entfernen"
+        >✕</button>
+      </div>
+    `).join('')
+    : 'Noch keine Artikel im Warenkorb.';
+
+  $('sendButton').disabled = !cart.length;
+}
+
+function removeItem(i) {
+  cart.splice(i,1);
+  renderCart();
+}
+
 renderCart();
-$('orderMessage').textContent='Zum Warenkorb hinzugefügt.';
+
+function openMenu(which) {
+  $('home').hidden =
+    which !== 'home';
+
+  $('mainMenu').hidden =
+    which !== 'main';
+
+  $('drinksMenu').hidden =
+    which !== 'drinks';
+
+  $('dessertMenu').hidden =
+    which !== 'dessert';
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
 }
 
-function addBurger(){
-const z=selected('ingredients'),s=selected('sauces');
-add(selectedBurger,qty('burgerQty'),`Zutaten: ${z.length?z.join(', '):'Keine'}; Sauce: ${s.length?s.join(', '):'Keine'}`);
+function showKitchen() {
+  $('shop').hidden = true;
+  $('kitchen').hidden = false;
+  window.scrollTo(0,0);
 }
 
-function addSimple(name,id){add(name,qty(id))}
-function addDrink(){add(selectedDrink,qty('drinkQty'))}
-function addHotDrink(){add(selectedHot,qty('hotQty'))}
-
-function addIce(){
-const balls=Object.entries(iceCounts).filter(([,n])=>n>0);
-const total=balls.reduce((a,[,n])=>a+n,0);
-if(!total){alert('Bitte mindestens eine Kugel auswählen.');return}
-const toppings=selected('toppings');
-add('Glace',1,balls.map(([n,c])=>`${c}× ${n}`).join(', ')+(toppings.length?`; Toppings: ${toppings.join(', ')}`:''));
-Object.keys(iceCounts).forEach(k=>iceCounts[k]=0);
-renderIce();
+function showShop() {
+  $('shop').hidden = false;
+  $('kitchen').hidden = true;
+  window.scrollTo(0,0);
 }
 
-function renderCart(){
-const count=cart.reduce((a,x)=>a+x.qty,0);
-$('cartCount').textContent=count+' Artikel';
-['mainBadge','drinksBadge','dessertBadge'].forEach(id=>$(id).textContent='🛒 '+count+' Artikel');
-$('cart').innerHTML=cart.length?cart.map((x,i)=>`<div class="cartLine"><div><b>${x.qty}× ${esc(x.name)}</b>${x.details?`<div class="muted">${esc(x.details)}</div>`:''}</div><button onclick="removeItem(${i})" aria-label="Entfernen">✕</button></div>`).join(''):'Noch keine Artikel im Warenkorb.';
-$('sendButton').disabled=!cart.length;
+function renderOrders(items) {
+  $('orders').innerHTML = items.length
+    ? items.map(o => {
+
+      const css =
+        o.status === 'Fertig'
+          ? 'fertig'
+          : o.status === 'In Zubereitung'
+            ? 'zubereitung'
+            : 'neu';
+
+      const nummer = o.nummer == null
+        ? '—'
+        : String(o.nummer).padStart(3,'0');
+
+      return `
+        <article class="orderCard ${css}">
+          <div class="orderContent">
+
+            <div class="orderHead">
+              Bestellung #${nummer}
+              – ${esc(o.name)}
+            </div>
+
+            <div class="muted">
+              ${esc(o.time)}
+            </div>
+
+            <p class="status">
+              ${esc(o.status)}
+            </p>
+
+            ${o.items.map(x => `
+              <div class="item">
+                <b>
+                  ${Number(x.qty) || 1}×
+                  ${esc(x.name)}
+                </b>
+
+                ${x.details
+                  ? `<div class="muted">${esc(x.details)}</div>`
+                  : ''}
+              </div>
+            `).join('')}
+
+          </div>
+
+          <div>
+            <button
+              class="btn"
+              onclick="liveStatus('${esc(o.id)}','Neu')"
+            >🔴 Neu</button>
+
+            <button
+              class="btn orange"
+              onclick="liveStatus('${esc(o.id)}','In Zubereitung')"
+            >🟠 In Zubereitung</button>
+
+            <button
+              class="btn green"
+              onclick="liveStatus('${esc(o.id)}','Fertig')"
+            >🟢 Fertig</button>
+          </div>
+
+        </article>
+      `;
+    }).join('')
+    : 'Noch keine Bestellungen.';
 }
 
-function removeItem(i){cart.splice(i,1);renderCart()}
-renderCart();
-
-function openMenu(which){
-$('home').hidden=which!=='home';
-$('mainMenu').hidden=which!=='main';
-$('drinksMenu').hidden=which!=='drinks';
-$('dessertMenu').hidden=which!=='dessert';
-window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function showKitchen(){
-$('shop').hidden=true;
-$('kitchen').hidden=false;
-window.scrollTo(0,0);
-}
-
-function showShop(){
-$('shop').hidden=false;
-$('kitchen').hidden=true;
-window.scrollTo(0,0);
-}
-
-function renderOrders(items){
-$('orders').innerHTML=items.length?items.map(o=>{
-const css=o.status==='Fertig'?'fertig':o.status==='In Zubereitung'?'zubereitung':'neu';
-return `<article class="orderCard ${css}">
-<div class="orderContent">
-<div class="orderHead">Bestellung #${o.nummer==null?'—':String(o.nummer).padStart(3,'0')} – ${esc(o.name)}</div>
-<div class="muted">${esc(o.time)}</div>
-<p class="status">${esc(o.status)}</p>
-${o.items.map(x=>`<div class="item"><b>${Number(x.qty)||1}× ${esc(x.name)}</b>${x.details?`<div class="muted">${esc(x.details)}</div>`:''}</div>`).join('')}
-</div>
-<div>
-<button class="btn" onclick="liveStatus('${esc(o.id)}','Neu')">🔴 Neu</button>
-<button class="btn orange" onclick="liveStatus('${esc(o.id)}','In Zubereitung')">🟠 In Zubereitung</button>
-<button class="btn green" onclick="liveStatus('${esc(o.id)}','Fertig')">🟢 Fertig</button>
-</div>
-</article>`;
-}).join(''):'Noch keine Bestellungen.';
-}
 </script>
 
 <script type="module">
-import {initializeApp} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js';
-import {getAuth,signInAnonymously,signInWithEmailAndPassword,signOut,onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
-import {getFirestore,collection,doc,runTransaction,serverTimestamp,query,orderBy,onSnapshot,updateDoc} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
 
-const config={
-apiKey:'AIzaSyDw8SA9rWUkAVxB3zirrqQMUkXRkvvLnm8',
-authDomain:'mc-blumenweg-bde6f.firebaseapp.com',
-projectId:'mc-blumenweg-bde6f',
-storageBucket:'mc-blumenweg-bde6f.firebasestorage.app',
-messagingSenderId:'339533713341',
-appId:'1:339533713341:web:06cd3d1415a6839f4f0cd4',
-measurementId:'G-5NEG3HZF2V'
+import {
+  initializeApp
+} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js';
+
+import {
+  getAuth,
+  signInAnonymously,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
+
+import {
+  getFirestore,
+  collection,
+  doc,
+  runTransaction,
+  serverTimestamp,
+  query,
+  orderBy,
+  onSnapshot,
+  updateDoc
+} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
+
+const config = {
+  apiKey: 'AIzaSyDw8SA9rWUkAVxB3zirrqQMUkXRkvvLnm8',
+  authDomain: 'mc-blumenweg-bde6f.firebaseapp.com',
+  projectId: 'mc-blumenweg-bde6f',
+  storageBucket: 'mc-blumenweg-bde6f.firebasestorage.app',
+  messagingSenderId: '339533713341',
+  appId: '1:339533713341:web:06cd3d1415a6839f4f0cd4',
+  measurementId: 'G-5NEG3HZF2V'
 };
 
-const app=initializeApp(config);
-const auth=getAuth(app);
-const db=getFirestore(app);
-const KITCHEN_UID='rkIN2njKOcXqMQdAHbZsYiXvPLA3';
-let unsubscribe=null;
+const app = initializeApp(config);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-window.sendLiveOrder=async()=>{
-const name=$('customerName').value.trim();
-if(!name){
-$('orderMessage').textContent='Bitte zuerst deinen Namen eingeben.';
-return;
-}
-if(!cart.length){
-$('orderMessage').textContent='Dein Warenkorb ist leer.';
-return;
-}
+const KITCHEN_UID =
+  'rkIN2njKOcXqMQdAHbZsYiXvPLA3';
 
-const btn=$('sendButton');
-btn.disabled=true;
-$('orderMessage').textContent='Bestellung wird gesendet …';
+let unsubscribe = null;
 
-try{
-let user=auth.currentUser;
-if(!user)user=(await signInAnonymously(auth)).user;
+window.sendLiveOrder = async () => {
 
-if(user.uid===KITCHEN_UID){
-throw new Error('Du bist als Küche angemeldet. Bitte zum Bestellen ein anderes Gerät verwenden oder abmelden.');
-}
+  const name =
+    $('customerName').value.trim();
 
-const snapshot=cart.map(x=>({...x}));
+  if (!name) {
+    $('orderMessage').textContent =
+      'Bitte zuerst deinen Namen eingeben.';
+    return;
+  }
 
-const nummer=await runTransaction(db,async tx=>{
-const counterRef=doc(db,'zaehler','bestellungen');
-const counterSnap=await tx.get(counterRef);
-if(!counterSnap.exists())throw new Error('Der Bestellzähler fehlt in Firebase.');
-const old=counterSnap.data().letzteNummer;
+  if (!cart.length) {
+    $('orderMessage').textContent =
+      'Dein Warenkorb ist leer.';
+    return;
+  }
 
-if(!Number.isInteger(old)||old<0){
-throw new Error('Ungültiger Bestellzähler.');
-}
+  const btn = $('sendButton');
 
-const next=old+1;
-const orderRef=doc(collection(db,'bestellungen'));
+  btn.disabled = true;
 
-tx.update(counterRef,{letzteNummer:next});
-tx.set(orderRef,{
-name,
-artikel:snapshot,
-status:'Neu',
-erstellt:serverTimestamp(),
-kundeUid:user.uid,
-nummer:next
-});
+  $('orderMessage').textContent =
+    'Bestellung wird gesendet …';
 
-return next;
-});
+  try {
 
-cart.splice(0);
-renderCart();
-$('orderMessage').textContent=`✅ Bestellung #${String(nummer).padStart(3,'0')} – ${name} erfolgreich gesendet!`;
-openMenu('home');
+    let user = auth.currentUser;
 
-}catch(e){
-console.error(e);
-$('orderMessage').textContent='❌ Bestellung konnte nicht gesendet werden: '+(e.message||e);
-}finally{
-btn.disabled=!cart.length;
-}
+    if (!user) {
+      user = (
+        await signInAnonymously(auth)
+      ).user;
+    }
+
+    if (user.uid === KITCHEN_UID) {
+      throw new Error(
+        'Du bist als Küche angemeldet. ' +
+        'Bitte zum Bestellen ein anderes Gerät ' +
+        'verwenden oder abmelden.'
+      );
+    }
+
+    const snapshot =
+      cart.map(x => ({...x}));
+
+    const nummer = await runTransaction(
+      db,
+      async tx => {
+
+        const counterRef =
+          doc(db,'zaehler','bestellungen');
+
+        const counterSnap =
+          await tx.get(counterRef);
+
+        if (!counterSnap.exists()) {
+          throw new Error(
+            'Der Bestellzähler fehlt in Firebase.'
+          );
+        }
+
+        const old =
+          counterSnap.data().letzteNummer;
+
+        if (
+          !Number.isInteger(old)
+          || old < 0
+        ) {
+          throw new Error(
+            'Ungültiger Bestellzähler.'
+          );
+        }
+
+        const next = old + 1;
+
+        const orderRef =
+          doc(collection(db,'bestellungen'));
+
+        tx.update(
+          counterRef,
+          {letzteNummer:next}
+        );
+
+        tx.set(
+          orderRef,
+          {
+            name,
+            artikel:snapshot,
+            status:'Neu',
+            erstellt:serverTimestamp(),
+            kundeUid:user.uid,
+            nummer:next
+          }
+        );
+
+        return next;
+      }
+    );
+
+    cart.splice(0);
+    renderCart();
+
+    $('orderMessage').textContent =
+      `✅ Bestellung #${String(nummer).padStart(3,'0')} – ` +
+      `${name} erfolgreich gesendet!`;
+
+    openMenu('home');
+
+  } catch(e) {
+
+    console.error(e);
+
+    $('orderMessage').textContent =
+      '❌ Bestellung konnte nicht gesendet werden: ' +
+      (e.message || e);
+
+  } finally {
+
+    btn.disabled = !cart.length;
+
+  }
 };
 
-window.liveLogin=async()=>{
-try{
-$('loginMessage').textContent='Anmeldung läuft …';
-const result=await signInWithEmailAndPassword(auth,$('email').value.trim(),$('password').value);
+window.liveLogin = async () => {
 
-if(result.user.uid!==KITCHEN_UID){
-await signOut(auth);
-throw new Error('Dieses Konto hat keinen Küchenzugriff.');
-}
+  try {
 
-$('loginMessage').textContent='';
-}catch(e){
-$('loginMessage').textContent='❌ '+e.message;
-}
+    $('loginMessage').textContent =
+      'Anmeldung läuft …';
+
+    const result =
+      await signInWithEmailAndPassword(
+        auth,
+        $('email').value.trim(),
+        $('password').value
+      );
+
+    if (
+      result.user.uid !== KITCHEN_UID
+    ) {
+      await signOut(auth);
+
+      throw new Error(
+        'Dieses Konto hat keinen Küchenzugriff.'
+      );
+    }
+
+    $('loginMessage').textContent = '';
+
+  } catch(e) {
+
+    $('loginMessage').textContent =
+      '❌ ' + e.message;
+
+  }
 };
 
-window.liveLogout=async()=>{
-try{
-await signOut(auth);
-$('loginMessage').textContent='Abgemeldet.';
-}catch(e){
-$('kitchenMessage').textContent=e.message;
-}
+window.liveLogout = async () => {
+
+  try {
+
+    await signOut(auth);
+
+    $('loginMessage').textContent =
+      'Abgemeldet.';
+
+  } catch(e) {
+
+    $('kitchenMessage').textContent =
+      e.message;
+
+  }
 };
 
-window.liveStatus=async(id,status)=>{
-try{
-if(auth.currentUser?.uid!==KITCHEN_UID){
-throw new Error('Keine Küchenberechtigung.');
-}
-await updateDoc(doc(db,'bestellungen',id),{status});
-}catch(e){
-$('kitchenMessage').textContent='❌ '+e.message;
-}
+window.liveStatus = async (
+  id,
+  status
+) => {
+
+  try {
+
+    if (
+      auth.currentUser?.uid !== KITCHEN_UID
+    ) {
+      throw new Error(
+        'Keine Küchenberechtigung.'
+      );
+    }
+
+    await updateDoc(
+      doc(db,'bestellungen',id),
+      {status}
+    );
+
+  } catch(e) {
+
+    $('kitchenMessage').textContent =
+      '❌ ' + e.message;
+
+  }
 };
 
-function listen(){
-if(unsubscribe)unsubscribe();
+function listen() {
 
-unsubscribe=onSnapshot(
-query(collection(db,'bestellungen'),orderBy('erstellt','desc')),
-snap=>{
-const orders=snap.docs.map(d=>{
-const x=d.data();
-return{
-id:d.id,
-name:x.name||'Unbekannt',
-nummer:x.nummer,
-status:x.status||'Neu',
-items:Array.isArray(x.artikel)?x.artikel:[],
-time:x.erstellt?.toDate().toLocaleString('de-CH')||'Gerade eben'
-};
-});
+  if (unsubscribe) {
+    unsubscribe();
+  }
 
-renderOrders(orders);
-$('kitchenMessage').textContent='Bestellungen werden live aktualisiert.';
-},
-e=>{
-$('kitchenMessage').textContent='❌ '+e.message;
+  unsubscribe = onSnapshot(
+    query(
+      collection(db,'bestellungen'),
+      orderBy('erstellt','desc')
+    ),
+
+    snap => {
+
+      const orders =
+        snap.docs.map(d => {
+
+          const x = d.data();
+
+          return {
+            id:d.id,
+            name:x.name || 'Unbekannt',
+            nummer:x.nummer,
+            status:x.status || 'Neu',
+            items:Array.isArray(x.artikel)
+              ? x.artikel
+              : [],
+            time:x.erstellt?.toDate()
+              .toLocaleString('de-CH')
+              || 'Gerade eben'
+          };
+        });
+
+      renderOrders(orders);
+
+      $('kitchenMessage').textContent =
+        'Bestellungen werden live aktualisiert.';
+    },
+
+    e => {
+
+      $('kitchenMessage').textContent =
+        '❌ ' + e.message;
+
+    }
+  );
 }
+
+onAuthStateChanged(
+  auth,
+  user => {
+
+    const kitchen =
+      user?.uid === KITCHEN_UID;
+
+    $('loginArea').hidden =
+      kitchen;
+
+    $('kitchenArea').hidden =
+      !kitchen;
+
+    if (kitchen) {
+
+      listen();
+
+    } else if (unsubscribe) {
+
+      unsubscribe();
+      unsubscribe = null;
+
+    }
+  }
 );
-}
 
-onAuthStateChanged(auth,user=>{
-const kitchen=user?.uid===KITCHEN_UID;
-$('loginArea').hidden=kitchen;
-$('kitchenArea').hidden=!kitchen;
-
-if(kitchen){
-listen();
-}else if(unsubscribe){
-unsubscribe();
-unsubscribe=null;
-}
-});
 </script>
+
 </body>
 </html>
