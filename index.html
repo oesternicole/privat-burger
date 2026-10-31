@@ -1,5 +1,4 @@
 
-
 <!doctype html>
 <html lang="de-CH">
 <head>
@@ -18,7 +17,7 @@ h2{margin:14px 0}
 h3{margin:16px 0 8px}
 .panel{background:white;border-radius:15px;padding:15px;margin:12px 0;box-shadow:0 2px 10px #0001}
 .menuGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
-.menuTile{border:0;border-radius:18px;background:#fff;padding:25px 14px;font-size:22px;font-weight:750;box-shadow:0 2px 10px #0002;cursor:pointer}
+.menuTile{border:0;border-radius:18px;background:white;padding:25px 14px;font-size:22px;font-weight:750;box-shadow:0 2px 10px #0002;cursor:pointer}
 .menuTile small{display:block;font-size:13px;font-weight:400;margin-top:7px}
 .btn{border:0;background:#c62828;color:white;border-radius:10px;padding:12px 15px;font-size:16px;font-weight:700;cursor:pointer;margin:4px 4px 4px 0}
 .btn.alt{background:#555}
@@ -32,7 +31,6 @@ h3{margin:16px 0 8px}
 .item{border-top:1px solid #eee;padding:12px 0}
 .item:first-child{border-top:0}
 .itemTop{display:flex;align-items:center;gap:12px}
-.foodIcon{font-size:38px;width:56px;text-align:center}
 .muted{color:#666;font-size:14px}
 .cartLine{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #eee}
 .cartLine button{border:0;background:#eee;border-radius:8px;padding:7px}
@@ -47,6 +45,47 @@ h3{margin:16px 0 8px}
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
 .cartBadge{background:#f6d87c;color:#2d2500;border-radius:30px;padding:7px 12px;font-weight:700}
 footer{text-align:center;padding:25px;color:#777;font-size:13px}
+
+/* Produktbilder aus der vorhandenen Bilddatei */
+.foodPhoto{
+width:105px;
+height:105px;
+flex-shrink:0;
+border-radius:14px;
+background-image:url('file_00000000cff8820aa18156f7f4672433.png');
+background-repeat:no-repeat;
+background-size:400% 300%;
+background-color:#f5e7d3;
+border:1px solid #eee;
+}
+.photoGrid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(135px,1fr));
+gap:12px;
+margin:10px 0;
+}
+.photoChoice{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:8px;
+border:2px solid #eee;
+border-radius:14px;
+padding:12px 7px;
+background:#fff;
+cursor:pointer;
+text-align:center;
+font-weight:650;
+}
+.photoChoice:has(input:checked){border-color:#c62828;background:#fff3ed}
+.photoChoice input{accent-color:#c62828}
+.photoChoice .foodPhoto{width:115px;height:105px}
+.photoChoice .emoji{font-size:50px;min-height:105px;display:flex;align-items:center}
+.icePhoto{display:inline-block;width:80px;height:80px;vertical-align:middle;margin-right:10px}
+@media(max-width:430px){
+.photoGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.photoChoice .foodPhoto{width:100px;height:95px}
+}
 </style>
 </head>
 <body>
@@ -77,8 +116,8 @@ footer{text-align:center;padding:25px;color:#777;font-size:13px}
 </div>
 <h2>🍔 Hauptmenü</h2>
 <div class="panel">
-<h3>Burger</h3>
-<div id="burgers"></div>
+<h3>Burger auswählen</h3>
+<div id="burgers" class="photoGrid"></div>
 <h3>Wähle deine Zutaten</h3>
 <div id="ingredients"></div>
 <h3>Wähle deine Sauce</h3>
@@ -88,14 +127,14 @@ footer{text-align:center;padding:25px;color:#777;font-size:13px}
 </div>
 <div class="panel">
 <div class="itemTop">
-<span class="foodIcon">🍗</span>
+<div class="foodPhoto" style="background-position:66.666% 0%"></div>
 <div><h3>Chicken Nuggets</h3><label>Menge <input id="nuggetsQty" class="qty" type="number" min="1" max="30" value="1"></label></div>
 </div>
 <button class="btn" onclick="addSimple('Chicken Nuggets','nuggetsQty')">Hinzufügen</button>
 </div>
 <div class="panel">
 <div class="itemTop">
-<span class="foodIcon">🍟</span>
+<div class="foodPhoto" style="background-position:100% 0%"></div>
 <div><h3>Pommes</h3><label>Menge <input id="friesQty" class="qty" type="number" min="1" max="30" value="1"></label></div>
 </div>
 <button class="btn" onclick="addSimple('Pommes','friesQty')">Hinzufügen</button>
@@ -110,13 +149,13 @@ footer{text-align:center;padding:25px;color:#777;font-size:13px}
 <h2>🥤 Getränke</h2>
 <div class="panel">
 <h3>Kalte Getränke</h3>
-<div id="drinks"></div>
+<div id="drinks" class="photoGrid"></div>
 <label>Menge <input id="drinkQty" class="qty" type="number" min="1" max="30" value="1"></label>
 <div><button class="btn" onclick="addDrink()">🥤 Getränk hinzufügen</button></div>
 </div>
 <div class="panel">
 <h3>Heisse Getränke</h3>
-<div id="hotDrinks"></div>
+<div id="hotDrinks" class="photoGrid"></div>
 <p class="muted">Beim Tee kannst du die Sorte aus unserer Teebox auswählen.</p>
 <label>Menge <input id="hotQty" class="qty" type="number" min="1" max="30" value="1"></label>
 <div><button class="btn" onclick="addHotDrink()">☕ Getränk hinzufügen</button></div>
@@ -183,6 +222,21 @@ let selectedDrink='Coca-Cola';
 let selectedHot='Cappuccino';
 const iceCounts={Vanille:0,Schoko:0,Kaffee:0};
 
+const photoPositions={
+'Chickenburger':'0% 0%',
+'Beafburger':'33.333% 0%',
+'Chicken Nuggets':'66.666% 0%',
+'Pommes':'100% 0%',
+'Coca-Cola':'0% 50%',
+'Fanta':'33.333% 50%',
+'Eistee':'66.666% 50%',
+'Wasser mit Kohlensäure':'100% 50%',
+'Wasser ohne Kohlensäure':'0% 100%',
+'Vanille':'33.333% 100%',
+'Schoko':'66.666% 100%',
+'Kaffee':'100% 100%'
+};
+
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({
 '&':'&amp;',
 '<':'&lt;',
@@ -191,15 +245,27 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({
 "'":'&#39;'
 }[c]));
 
+function photo(name,extraClass=''){
+return `<span class="foodPhoto ${extraClass}" role="img" aria-label="${esc(name)}" style="background-position:${photoPositions[name]||'center'}"></span>`;
+}
+
 function choices(id,values,type,selected,change){
 $(id).innerHTML=values.map(v=>`<label class="choice"><input type="${type}" name="${id}" value="${esc(v)}" ${type==='radio'&&v===selected?'checked':''} ${change?`onchange="${change}(this.value)"`:''}>${esc(v)}</label>`).join('');
 }
 
-choices('burgers',['Chickenburger','Beafburger'],'radio',selectedBurger,'chooseBurger');
+function photoChoices(id,values,selected,change,emojis={}){
+$(id).innerHTML=values.map(v=>`<label class="photoChoice">
+${photoPositions[v]?photo(v):`<span class="emoji">${emojis[v]||'🥤'}</span>`}
+<span>${esc(v)}</span>
+<input type="radio" name="${id}" value="${esc(v)}" ${v===selected?'checked':''} onchange="${change}(this.value)">
+</label>`).join('');
+}
+
+photoChoices('burgers',['Chickenburger','Beafburger'],selectedBurger,'chooseBurger');
 choices('ingredients',['Gurken','Zwiebeln','Salat','Tomaten','Käse'],'checkbox');
 choices('sauces',['BigMac Sauce','Cocktail','Ketchup','Mayonnaise'],'checkbox');
-choices('drinks',['Coca-Cola','Fanta','Eistee','Wasser mit Kohlensäure','Wasser ohne Kohlensäure'],'radio',selectedDrink,'chooseDrink');
-choices('hotDrinks',['Cappuccino','Espresso','Tee'],'radio',selectedHot,'chooseHotDrink');
+photoChoices('drinks',['Coca-Cola','Fanta','Eistee','Wasser mit Kohlensäure','Wasser ohne Kohlensäure'],selectedDrink,'chooseDrink');
+photoChoices('hotDrinks',['Cappuccino','Espresso','Tee'],selectedHot,'chooseHotDrink',{Cappuccino:'☕',Espresso:'☕',Tee:'🫖'});
 choices('toppings',['Streusel','Ovo','Rahm'],'checkbox');
 
 function chooseBurger(v){selectedBurger=v}
@@ -207,7 +273,13 @@ function chooseDrink(v){selectedDrink=v}
 function chooseHotDrink(v){selectedHot=v}
 
 function renderIce(){
-$('ice').innerHTML=Object.keys(iceCounts).map(n=>`<div class="item"><b>${esc(n)}</b> &nbsp; <button class="btn alt" onclick="changeIce('${n}',-1)">−</button> <b>${iceCounts[n]}</b> <button class="btn" onclick="changeIce('${n}',1)">+</button></div>`).join('');
+$('ice').innerHTML=Object.keys(iceCounts).map(n=>`<div class="item">
+${photo(n,'icePhoto')}
+<b>${esc(n)}</b>
+<button class="btn alt" onclick="changeIce('${n}',-1)">−</button>
+<b>${iceCounts[n]}</b>
+<button class="btn" onclick="changeIce('${n}',1)">+</button>
+</div>`).join('');
 }
 
 function changeIce(n,d){
@@ -287,7 +359,7 @@ $('orders').innerHTML=items.length?items.map(o=>{
 const css=o.status==='Fertig'?'fertig':o.status==='In Zubereitung'?'zubereitung':'neu';
 return `<article class="orderCard ${css}">
 <div class="orderContent">
-<div class="orderHead">Bestellung #${String(o.nummer??'?').padStart(3,'0')} – ${esc(o.name)}</div>
+<div class="orderHead">Bestellung #${o.nummer==null?'—':String(o.nummer).padStart(3,'0')} – ${esc(o.name)}</div>
 <div class="muted">${esc(o.time)}</div>
 <p class="status">${esc(o.status)}</p>
 ${o.items.map(x=>`<div class="item"><b>${Number(x.qty)||1}× ${esc(x.name)}</b>${x.details?`<div class="muted">${esc(x.details)}</div>`:''}</div>`).join('')}
@@ -351,7 +423,8 @@ const snapshot=cart.map(x=>({...x}));
 const nummer=await runTransaction(db,async tx=>{
 const counterRef=doc(db,'zaehler','bestellungen');
 const counterSnap=await tx.get(counterRef);
-const old=counterSnap.exists()?counterSnap.data().letzteNummer:0;
+if(!counterSnap.exists())throw new Error('Der Bestellzähler fehlt in Firebase.');
+const old=counterSnap.data().letzteNummer;
 
 if(!Number.isInteger(old)||old<0){
 throw new Error('Ungültiger Bestellzähler.');
@@ -360,7 +433,7 @@ throw new Error('Ungültiger Bestellzähler.');
 const next=old+1;
 const orderRef=doc(collection(db,'bestellungen'));
 
-tx.set(counterRef,{letzteNummer:next});
+tx.update(counterRef,{letzteNummer:next});
 tx.set(orderRef,{
 name,
 artikel:snapshot,
